@@ -1,78 +1,91 @@
-deVAB_u
-deVAB_g
-deVAB_r
-deVAB_i
-deVAB_z
+Axis Ratios:
+    deVAB_u
+    deVAB_g
+    deVAB_r
+    deVAB_i
+    deVAB_z
 
-expAB_u
-expAB_g
-expAB_r
-expAB_i
-expAB_z
+    expAB_u
+    expAB_g
+    expAB_r
+    expAB_i
+    expAB_z
 
-lnLstar_u
-lnLsatr_g
-lnLstar_r
-lnLstar_i
-lnLstar_z
+Model fit Parameters:
+    lnLstar_u
+    lnLsatr_g
+    lnLstar_r
+    lnLstar_i
+    lnLstar_z
 
-lnLdeV_u
-lnLdeV_g
-lnLdeV_r
-lnLdeV_i
-lnLdeV_z
+    lnLdeV_u
+    lnLdeV_g
+    lnLdeV_r
+    lnLdeV_i
+    lnLdeV_z
 
-lnLexp_u
-lnLexp_g
-lnLexp_r
-lnLexp_i
-lnLexp_x
+    lnLexp_u
+    lnLexp_g
+    lnLexp_r
+    lnLexp_i
+    lnLexp_x
 
-mE2_u
-mE2_g
-mE2_r
-mE2_i
-mE2_z
+Ellipticity:
+    mE2_u
+    mE2_g
+    mE2_r
+    mE2_i
+    mE2_z
 
-mE1_u
-mE1_g
-mE1_r
-mE1_i
-mE1_z
+    mE1_u
+    mE1_g
+    mE1_r
+    mE1_i
+    mE1_z
 
-mCr4_u
-mCr4_g
-mCr4_r
-mCr4_i
-mCr4_z
+Fourth Moment:
+    mCr4_u
+    mCr4_g
+    mCr4_r
+    mCr4_i
+    mCr4_z
 
-mRrCc_u
-mRrCc_g
-mRrCc_r
-mRrCc_i
-mRrCc_z
+Second Mooment:
+    mRrCc_u
+    mRrCc_g
+    mRrCc_r
+    mRrCc_i
+    mRrCc_z
 
-**Need petroR50_x and petroR90_x to calcualte**
-concentation_g
-concentration_r
-concentration_i
-concentration_z
-concentration_u
+Concentration Index:
+    **Need petroR50_x and petroR90_x to calcualte**
+    ** concentration_x = (petroR90_x)/(petroR50_x) **
+    concentation_g
+    concentration_r
+    concentration_i
+    concentration_z
+    concentration_u
 
-**Need fiberMag_x from SDSS to calculate**
-fibercolour_u-g
-fibercolour_g-r
-fibercolour_r-i
-fibercolour_i-z
+Fiber Colour:
+    **Need fiberMag_x from SDSS to calculate**
+    ** fibercolour_x-y = fiberMag_x - fiberMag_y **
+    fibercolour_u-g
+    fibercolour_g-r
+    fibercolour_r-i
+    fibercolour_i-z
 
-**Need modelMag_x to calculate**
-modelcolour_u-g
-modelcolour_g-r
-modelcolour_r-i
-modelcolour_i-z
+Model Colour:
+    **Need modelMag_x to calculate**
+    ** modelcolour_x-y = modelMag_x - modelMag_y **
+    modelcolour_u-g
+    modelcolour_g-r
+    modelcolour_r-i
+    modelcolour_i-z
 
-**Need petroMag_x from SDSS to calculate**
-petrocolour_u-g
-petrocolour_g-r
-petrocolour_r-i
-petrocolour_i-z
+Petrosian Colour:
+    **Need petroMag_x from SDSS to calculate**
+    ** petrocolour_x-y = petroMag_x - petroMag_y **
+    petrocolour_u-g
+    petrocolour_g-r
+    petrocolour_r-i
+    petrocolour_i-z
