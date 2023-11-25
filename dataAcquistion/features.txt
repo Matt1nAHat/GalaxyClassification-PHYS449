@@ -22,6 +22,12 @@ lnLdeV_r
 lnLdeV_i
 lnLdeV_z
 
+lnLexp_u
+lnLexp_g
+lnLexp_r
+lnLexp_i
+lnLexp_x
+
 mE2_u
 mE2_g
 mE2_r
@@ -40,7 +46,6 @@ mCr4_r
 mCr4_i
 mCr4_z
 
-Second Moment ** Need to calculate **
 mRrCc_u
 mRrCc_g
 mRrCc_r
@@ -54,19 +59,19 @@ concentration_i
 concentration_z
 concentration_u
 
-**Need to calculate**
+**Need fiberMag_x from SDSS to calculate**
 fibercolour_u-g
 fibercolour_g-r
 fibercolour_r-i
 fibercolour_i-z
 
-**Need to calculate**
+**Need modelMag_x to calculate**
 modelcolour_u-g
 modelcolour_g-r
 modelcolour_r-i
 modelcolour_i-z
 
-**Need to calculate**
+**Need petroMag_x from SDSS to calculate**
 petrocolour_u-g
 petrocolour_g-r
 petrocolour_r-i
