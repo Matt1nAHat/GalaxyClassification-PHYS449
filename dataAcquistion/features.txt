@@ -52,7 +52,7 @@ mRrCc_r
 mRrCc_i
 mRrCc_z
 
-**Need to calcualte**
+**Need petroR50_x and petroR90_x to calcualte**
 concentation_g
 concentration_r
 concentration_i
