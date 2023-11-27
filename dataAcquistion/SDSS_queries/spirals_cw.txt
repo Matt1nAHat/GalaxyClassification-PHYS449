@@ -1,4 +1,4 @@
-For Spiral Galaxies with clockwise spiral arms, the following query was used:
+-- For Spiral Galaxies with clockwise spiral arms, the following query was used:
 
 SELECT TOP 1000
 g.objid, zns.nvote,

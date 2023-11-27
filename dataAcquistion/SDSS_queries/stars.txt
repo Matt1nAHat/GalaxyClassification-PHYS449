@@ -1,6 +1,6 @@
-For stars, the following query was used:
+-- For stars, the following query was used:
 
-SELECT TOP 1000 objid, u, g, r, i, z, ra, dec, flags_r
+SELECT TOP 1000 objid
 FROM Star
 WHERE
 ra BETWEEN 180 and 181 AND dec BETWEEN -0.5 and 0.5
