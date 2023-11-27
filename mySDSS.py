@@ -49,17 +49,25 @@ class PhotoObj:
         self.modelFitDEV = None
         self.modelFitEXP = None
         self.modelFitSTAR = None
+        self.p_el = None
+        self.p_cw = None
+        self.p_acw = None
+        self.p_edge = None
+        self.p_mg = None
 
     def download(self, get_image=False):
         #Script has been updated to pull additional measurements from the database (From Matthew Charbonneau)
-        script = "SELECT specObjID,ra,dec,u,g,r,i,z,type,deVAB_u,deVAB_g,deVAB_r,deVAB_i,deVAB_z,expAB_u,expAB_g,expAB_r,expAB_i,expAB_z,\
-            lnLstar_u,lnLstar_g,lnLstar_r,lnLstar_i,lnLstar_z,lnLdeV_u,lnLdeV_g,lnLdeV_r,lnLdeV_i,lnLdeV_z,lnLexp_u,lnLexp_g,lnLexp_r,\
-            lnLexp_i,lnLexp_z,mE2_u,mE2_g,mE2_r,mE2_i,mE2_z,mE1_u,mE1_g,mE1_r,mE1_i,mE1_z,mRrCc_u,mRrCc_g,mRrCc_r,mRrCc_i,mRrCc_z,mCr4_u,\
-            mCr4_g,mCr4_r,mCr4_i,mCr4_z,fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z,modelMag_u,modelMag_g,modelMag_r,modelMag_i,\
-            modelMag_z,petroMag_u,petroMag_g,petroMag_r,petroMag_i,petroMag_z,petroR50_u,petroR50_g,petroR50_r,petroR50_i,petroR50_z,petroR90_u,\
-            petroR90_g,petroR90_r,petroR90_i,petroR90_z "
-        
-        script = script + f"FROM PhotoObj WHERE objID={self.objID}"
+        script = """
+        SELECT p.specObjID, p.ra, p.dec, p.u, p.g, p.r, p.i, p.z, p.type, p.deVAB_u, p.deVAB_g, p.deVAB_r, p.deVAB_i, p.deVAB_z, p.expAB_u, p.expAB_g, p.expAB_r, p.expAB_i, p.expAB_z,
+            p.lnLstar_u, p.lnLstar_g, p.lnLstar_r, p.lnLstar_i, p.lnLstar_z, p.lnLdeV_u, p.lnLdeV_g, p.lnLdeV_r, p.lnLdeV_i, p.lnLdeV_z, p.lnLexp_u, p.lnLexp_g, p.lnLexp_r,
+            p.lnLexp_i, p.lnLexp_z, p.mE2_u, p.mE2_g, p.mE2_r, p.mE2_i, p.mE2_z, p.mE1_u, p.mE1_g, p.mE1_r, p.mE1_i, p.mE1_z, p.mRrCc_u, p.mRrCc_g, p.mRrCc_r, p.mRrCc_i, p.mRrCc_z, p.mCr4_u,
+            p.mCr4_g, p.mCr4_r, p.mCr4_i, p.mCr4_z, p.fiberMag_u, p.fiberMag_g, p.fiberMag_r, p.fiberMag_i, p.fiberMag_z, p.modelMag_u, p.modelMag_g, p.modelMag_r, p.modelMag_i,
+            p.modelMag_z, p.petroMag_u, p.petroMag_g, p.petroMag_r, p.petroMag_i, p.petroMag_z, p.petroR50_u, p.petroR50_g, p.petroR50_r, p.petroR50_i, p.petroR50_z, p.petroR90_u,
+            p.petroR90_g, p.petroR90_r, p.petroR90_i, p.petroR90_z, zns.nvote, zns.p_el as elliptical, zns.p_cw as spiralclock, zns.p_acw as spiralanticlock, 
+            zns.p_edge as edgeon, zns.p_mg as merger
+        """
+
+        script = script + f"FROM PhotoObjAll as p JOIN ZooNoSpec AS zns ON p.objID=zns.objid AND p.objID={self.objID}"
         df = sql2df(script)
         if len(df)>0:
             float_cols = ['ra','dec','u','g','r','i','z','deVAB_u','deVAB_g','deVAB_r','deVAB_i','deVAB_z','expAB_u','expAB_g','expAB_r',
@@ -68,7 +76,7 @@ class PhotoObj:
                           'mRrCc_g','mRrCc_r','mRrCc_i','mRrCc_z','mCr4_u','mCr4_g','mCr4_r','mCr4_i','mCr4_z','fiberMag_u','fiberMag_g',
                           'fiberMag_r','fiberMag_i','fiberMag_z','modelMag_u','modelMag_g','modelMag_r','modelMag_i','modelMag_z','petroMag_u',
                           'petroMag_g','petroMag_r','petroMag_i','petroMag_z','petroR50_u','petroR50_g','petroR50_r','petroR50_i','petroR50_z',
-                          'petroR90_u','petroR90_g','petroR90_r','petroR90_i','petroR90_z']
+                          'petroR90_u','petroR90_g','petroR90_r','petroR90_i','petroR90_z','nvote','elliptical','spiralclock','spiralanticlock','edgeon','merger']
             
             df[float_cols] = df[float_cols].astype(float)
             self.specObjID = df['specObjID'].iloc[0]
@@ -95,6 +103,11 @@ class PhotoObj:
             self.modelFitDEV = {'u':df['lnLdeV_u'].iloc[0], 'g':df['lnLdeV_g'].iloc[0], 'r':df['lnLdeV_r'].iloc[0], 'i':df['lnLdeV_i'].iloc[0], 'z':df['lnLdeV_z'].iloc[0]}
             self.modelFitEXP = {'u':df['lnLexp_u'].iloc[0], 'g':df['lnLexp_g'].iloc[0], 'r':df['lnLexp_r'].iloc[0], 'i':df['lnLexp_i'].iloc[0], 'z':df['lnLexp_z'].iloc[0]}
             self.modelFitSTAR = {'u':df['lnLstar_u'].iloc[0], 'g':df['lnLstar_g'].iloc[0], 'r':df['lnLstar_r'].iloc[0], 'i':df['lnLstar_i'].iloc[0], 'z':df['lnLstar_z'].iloc[0]}
+            self.p_el = df['elliptical'].iloc[0]
+            self.p_cw = df['spiralclock'].iloc[0]
+            self.p_acw = df['spiralanticlock'].iloc[0]
+            self.p_edge = df['edgeon'].iloc[0]
+            self.p_mg = df['merger'].iloc[0]
 
             self.type = photo_types[df['type'].iloc[0]]
             if get_image:

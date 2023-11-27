@@ -50,6 +50,11 @@ def getFeatures(obj_ID):
     #Append features to featureList
     featureList.append(obj_ID)
     featureList.append(ph.type)
+    featureList.append(ph.p_el) # probability of being an elliptical galaxy
+    featureList.append(ph.p_cw) # probability of being a clockwise spiral galaxy
+    featureList.append(ph.p_acw) # probability of being an anticlockwise spiral galaxy
+    featureList.append(ph.p_edge) # probability of being an edge-on galaxy
+    featureList.append(ph.p_mg) # probability of being a merger
     featureList.extend(calcModelColour(ph.fiberColour).values())
     featureList.extend(calcModelColour(ph.modelColour).values())
     featureList.extend(calcModelColour(ph.petroColour).values())
