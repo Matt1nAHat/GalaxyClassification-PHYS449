@@ -85,6 +85,7 @@ def saveFeatureVectors(csvPath='Objectlist.csv'):
     with open(csvPath, 'r') as f:
         reader = csv.reader(f)
         next(reader)  # Skip the header row
+        next(reader)  # Skip the second row
 
         # Open the output text file for writing
         with open('galaxyDataset.txt', 'w') as out_file:
@@ -93,6 +94,4 @@ def saveFeatureVectors(csvPath='Objectlist.csv'):
             for row in reader:
                 # Get the object ID from the first column
                 object_id = int(row[0])
-                out_file.write(getFeatures(object_id))
-
-#print(getFeatures(1237651539790856296))
+                out_file.write(str(getFeatures(object_id)))
