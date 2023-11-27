@@ -1,5 +1,6 @@
+import csv
 import numpy as np
-import sdss 
+from mySDSS import PhotoObj 
 
 def calcModelColour(magnitudeDict):
     """
@@ -42,11 +43,13 @@ def getFeatures(obj_ID):
     Returns:
     list: The feature vector.
     """
-    ph = sdss.PhotoObj(obj_ID)
+    ph = PhotoObj(obj_ID)
     ph.cutout_image()
     featureList = []
     
     #Append features to featureList
+    featureList.append(obj_ID)
+    featureList.append(ph.type)
     featureList.extend(calcModelColour(ph.fiberColour).values())
     featureList.extend(calcModelColour(ph.modelColour).values())
     featureList.extend(calcModelColour(ph.petroColour).values())
@@ -66,3 +69,30 @@ def getFeatures(obj_ID):
 
     return feature_vector
 
+def saveFeatureVectors(csvPath='Objectlist.csv'):
+    """
+    This function reads a CSV file containing object IDs, retrieves the feature vectors for each object ID using the getFeatures function, 
+    and writes the feature vectors to an output text file.
+
+    Parameters:
+    csvPath (str): The path to the CSV file containing the object IDs. Defaults to 'Objectlist.csv'.
+
+    Returns:
+    None
+    """
+    
+    # Open the CSV file
+    with open(csvPath, 'r') as f:
+        reader = csv.reader(f)
+        next(reader)  # Skip the header row
+
+        # Open the output text file for writing
+        with open('galaxyDataset.txt', 'w') as out_file:
+
+            # Loop through each row in the CSV file
+            for row in reader:
+                # Get the object ID from the first column
+                object_id = int(row[0])
+                out_file.write(getFeatures(object_id))
+
+#print(getFeatures(1237651539790856296))
