@@ -3,6 +3,6 @@
  
 ### Members:
 - Matthew Charbonneau - 20822976
-- Jakon Devey - 20854189
+- Jakob Devey - 20854189
 - Tom Harding
 - Aaron Herschberger

@@ -1,3 +1,3 @@
-from featureVector import getFeatures as get
+from featureVector import saveFeatureVectors
 
-print(get(1237648673458815588))
+saveFeatureVectors('dataAcquistion\Object_IDs_and_classifications\GZ_elliptical_100.csv')
