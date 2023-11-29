@@ -31,7 +31,7 @@ class NeuralNetwork(nn.Module):
         self.fc2 = nn.Linear(hidden_size1, hidden_size2).float()  # Set dtype to float
         self.relu2 = nn.ReLU()
         self.fc3 = nn.Linear(hidden_size2, output_size).float()  # Set dtype to float
-        self.softmax = nn.Softmax(dim=1)
+        self.softmax = nn.Softmax(dim=-1)  # Use dim=-1 to infer the correct dimension
 
     def forward(self, x):
         x = self.fc1(x)
