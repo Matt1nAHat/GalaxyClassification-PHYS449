@@ -16,13 +16,12 @@ To create feature vectors from images:
 
 # Dependancies
 ### This project utilizes the following libraries:
-numpy
-SDSS
-csv
-sklearn
-pandas
-io
-urllib
+- numpy
+- SDSS
+- csv
+- sklearn
+- pandas
+- io
 
 # Citations
 Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011. (https://jmlr.csail.mit.edu/papers/v12/pedregosa11a.html)
