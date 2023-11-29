@@ -1,3 +1,3 @@
 from featureVector import saveFeatureVectors
 
-saveFeatureVectors('dataAcquistion\Object_IDs_and_classifications\GZ_elliptical_100.csv')
+saveFeatureVectors('dataAcquistion\Object_IDs_and_classifications\combined.csv')

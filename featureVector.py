@@ -93,7 +93,7 @@ def saveFeatureVectors(csvPath='Objectlist.csv'):
         next(reader)  # Skip the second row
 
         # Open the output text file for writing
-        with open('galaxyDataset.txt', 'w') as out_file:
+        with open('galaxyDataset_1000ea.txt', 'w') as out_file:
 
             # Loop through each row in the CSV file
             for row in reader:
