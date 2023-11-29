@@ -1,9 +1,6 @@
-from urllib.request import urlopen, urlretrieve
 import matplotlib.pyplot as plt
-import pandas as pd
-from io import StringIO
-from sdss.utils import (decode_objid, decode_specid, sql2df, binimg2array,
-                   img_cutout, show_spect, show_object)
+from sdss.utils import (decode_objid, sql2df, binimg2array,
+                   img_cutout)
 from sdss.refs import photo_types
 
 """
