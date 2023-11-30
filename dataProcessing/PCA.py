@@ -32,7 +32,7 @@ def performPCA(path, outPath):
     # Finalize the label array from probabilities to a single label
     final_labels = []
     for label in labels:
-        if label[1] == 'Star':
+        if label[1] == 'STAR':
             final_labels.append('Star')
         else:
             # Get the index of the maximum probability among the galaxy types

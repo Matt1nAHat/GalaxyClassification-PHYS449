@@ -33,7 +33,7 @@ def calcConcentration(petroR90, petroR50):
         ratioDict[key] = petroR90[key] / petroR50[key]
     return ratioDict
 
-def getFeatures(obj_ID, zoo=True):
+def getFeatures(obj_ID, zoo):
     """
     Get the features of the object from the SDSS database and create the feature vector.
 
@@ -113,7 +113,7 @@ def saveFeatureVectors(csvPath, outPath):
             for row in reader:
                 object_id = int(row[0])
                 try:
-                    out_file.write(str(getFeatures(object_id)))
+                    out_file.write(str(getFeatures(object_id, True)))
                 except Exception:
-                    out_file.write(str(getFeatures(object_id, zoo=False)))
+                    out_file.write(str(getFeatures(object_id, False)))
                     continue

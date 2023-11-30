@@ -55,7 +55,7 @@ class PhotoObj:
     def download(self, get_image=False):
         #Script has been updated to pull additional measurements from the database (From Matthew Charbonneau)
         script = """
-        SELECT p.objID, p.ra, p.dec, p.u, p.g, p.r, p.i, p.z, p.type, p.deVAB_u, p.deVAB_g, p.deVAB_r, p.deVAB_i, p.deVAB_z, p.expAB_u, p.expAB_g, p.expAB_r, p.expAB_i, p.expAB_z,
+        SELECT p.specObjID, p.ra, p.dec, p.u, p.g, p.r, p.i, p.z, p.type, p.deVAB_u, p.deVAB_g, p.deVAB_r, p.deVAB_i, p.deVAB_z, p.expAB_u, p.expAB_g, p.expAB_r, p.expAB_i, p.expAB_z,
             p.lnLstar_u, p.lnLstar_g, p.lnLstar_r, p.lnLstar_i, p.lnLstar_z, p.lnLdeV_u, p.lnLdeV_g, p.lnLdeV_r, p.lnLdeV_i, p.lnLdeV_z, p.lnLexp_u, p.lnLexp_g, p.lnLexp_r,
             p.lnLexp_i, p.lnLexp_z, p.mE2_u, p.mE2_g, p.mE2_r, p.mE2_i, p.mE2_z, p.mE1_u, p.mE1_g, p.mE1_r, p.mE1_i, p.mE1_z, p.mRrCc_u, p.mRrCc_g, p.mRrCc_r, p.mRrCc_i, p.mRrCc_z, p.mCr4_u,
             p.mCr4_g, p.mCr4_r, p.mCr4_i, p.mCr4_z, p.fiberMag_u, p.fiberMag_g, p.fiberMag_r, p.fiberMag_i, p.fiberMag_z, p.modelMag_u, p.modelMag_g, p.modelMag_r, p.modelMag_i,
@@ -114,7 +114,7 @@ class PhotoObj:
     
     def downloadNoZoo(self, get_image=False):
         #Script has been updated to pull additional measurements from the database (From Matthew Charbonneau)
-        script = "SELECT objID,ra,dec,u,g,r,i,z,type,deVAB_u,deVAB_g,deVAB_r,deVAB_i,deVAB_z,expAB_u,expAB_g,expAB_r,expAB_i,expAB_z,\
+        script = "SELECT specObjID,ra,dec,u,g,r,i,z,type,deVAB_u,deVAB_g,deVAB_r,deVAB_i,deVAB_z,expAB_u,expAB_g,expAB_r,expAB_i,expAB_z,\
             lnLstar_u,lnLstar_g,lnLstar_r,lnLstar_i,lnLstar_z,lnLdeV_u,lnLdeV_g,lnLdeV_r,lnLdeV_i,lnLdeV_z,lnLexp_u,lnLexp_g,lnLexp_r,\
             lnLexp_i,lnLexp_z,mE2_u,mE2_g,mE2_r,mE2_i,mE2_z,mE1_u,mE1_g,mE1_r,mE1_i,mE1_z,mRrCc_u,mRrCc_g,mRrCc_r,mRrCc_i,mRrCc_z,mCr4_u,\
             mCr4_g,mCr4_r,mCr4_i,mCr4_z,fiberMag_u,fiberMag_g,fiberMag_r,fiberMag_i,fiberMag_z,modelMag_u,modelMag_g,modelMag_r,modelMag_i,\
