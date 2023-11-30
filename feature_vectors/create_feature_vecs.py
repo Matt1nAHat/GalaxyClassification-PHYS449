@@ -1,3 +1,0 @@
-from featureVector import saveFeatureVectors
-
-saveFeatureVectors('dataAcquistion\Object_IDs_and_classifications\combined.csv')

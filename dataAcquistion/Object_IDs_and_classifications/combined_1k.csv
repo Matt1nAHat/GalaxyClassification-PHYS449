@@ -1,4 +1,4 @@
-#Table1,,,,,,,
+"# Contains 1000 ellipticals, spirals cw, spirals acw, stars, 296 mergers",,,,,,,
 objid,nvote,elliptical,spiralclock,spiralanticlock,edgeon,dontknow,merger
 1237648673458553624,26,0.922999978,0,0.037999999,0.037999999,0,0
 1237648673458684391,28,0.92900002,0,0,0.035999998,0.035999998,0
