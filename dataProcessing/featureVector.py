@@ -33,7 +33,7 @@ def calcConcentration(petroR90, petroR50):
         ratioDict[key] = petroR90[key] / petroR50[key]
     return ratioDict
 
-def getFeatures(obj_ID):
+def getFeatures(obj_ID, zoo=True):
     """
     Get the features of the object from the SDSS database and create the feature vector.
 
@@ -43,18 +43,33 @@ def getFeatures(obj_ID):
     Returns:
     list: The feature vector.
     """
-    ph = PhotoObj(obj_ID)
-    ph.cutout_image()
     featureList = []
+    ph = PhotoObj(obj_ID)
+    #For objects that are catelogued in Galaxy Zoo
+    if zoo:
+        ph.download()
+        featureList.append(obj_ID)
+        featureList.append(ph.type) # galaxy or star
+        featureList.append(ph.p_el) # probability of being an elliptical galaxy
+        featureList.append(ph.p_cw) # probability of being a clockwise spiral galaxy
+        featureList.append(ph.p_acw) # probability of being an anticlockwise spiral galaxy
+        featureList.append(ph.p_edge) # probability of being an edge-on galaxy
+        featureList.append(ph.p_mg) # probability of being a merger
+    
+    #For all stars and galaxies not catelogued in Galaxy Zoo
+    else:
+        ph.downloadNoZoo()
+        featureList.append(obj_ID)
+        featureList.append(ph.type) # galaxy or star
+        #Additional appends to keep the feature vector the same dimension
+        featureList.append(0) # probability of being an elliptical galaxy
+        featureList.append(0) # probability of being a clockwise spiral galaxy
+        featureList.append(0) # probability of being an anticlockwise spiral galaxy
+        featureList.append(0) # probability of being an edge-on galaxy
+        featureList.append(0) # probability of being a merger
+
     
     #Append features to featureList
-    featureList.append(obj_ID)
-    featureList.append(ph.type) # galaxy or star
-    featureList.append(ph.p_el) # probability of being an elliptical galaxy
-    featureList.append(ph.p_cw) # probability of being a clockwise spiral galaxy
-    featureList.append(ph.p_acw) # probability of being an anticlockwise spiral galaxy
-    featureList.append(ph.p_edge) # probability of being an edge-on galaxy
-    featureList.append(ph.p_mg) # probability of being a merger
     featureList.extend(calcModelColour(ph.fiberColour).values())
     featureList.extend(calcModelColour(ph.modelColour).values())
     featureList.extend(calcModelColour(ph.petroColour).values())
@@ -95,9 +110,10 @@ def saveFeatureVectors(csvPath, outPath):
 
         # Open the output text file for writing
         with open(outPath, 'w') as out_file:
-
-            # Loop through each row in the CSV file
             for row in reader:
-                # Get the object ID from the first column
                 object_id = int(row[0])
-                out_file.write(str(getFeatures(object_id)))
+                try:
+                    out_file.write(str(getFeatures(object_id)))
+                except Exception:
+                    out_file.write(str(getFeatures(object_id, zoo=False)))
+                    continue
