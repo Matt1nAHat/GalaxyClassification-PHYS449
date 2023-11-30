@@ -1,26 +1,82 @@
-from PCA import performPCA
-features, labels = performPCA()
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
-print(isinstance(features, np.ndarray))
-print(isinstance(labels, np.ndarray))
+# Specify the path to the 'processedData' folder
+data_folder = os.path.join('dataProcessing', 'processedData')
 
-# Assuming features and labels as NumPy arrays
-label_mapping = {'spiral': 0, 'merger': 1, 'Elliptical': 2, 'star': 3}
-labels = np.array([label_mapping[label] for label in labels])
+# Import the three text files from the 'processedData' folder
+file1_path = os.path.join(data_folder, 'testPCAList.txt')
+file2_path = os.path.join(data_folder, 'trainPCAList.txt')
+file3_path = os.path.join(data_folder, 'validPCAList.txt')
+
+label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
+
+with open(file1_path, 'r') as test:
+    # Process file1 contents
+    lines = test.readlines()
+    first_elements = []
+    other_elements = []
+    for line in lines:
+        elements = line.split()
+        first_element = elements[0]
+        other_element = elements[1:]
+        first_elements.append(first_element)
+        Test_labels = np.array([label_mapping[label] for label in first_elements])
+        Test_labels_tensor = torch.tensor(Test_labels, dtype=torch.long)
+        other_elements.append(other_element)
+        Test_features = other_elements
+        Test_features = [[float(value) for value in sublist] for sublist in Test_features]
+        Test_features_tensor = torch.tensor(Test_features).float()
+        print('test done')
+
+with open(file2_path, 'r') as train:
+    # Process file2 contents
+    lines = train.readlines()
+    first_elements = []
+    other_elements = []
+    for line in lines:
+        elements = line.split()
+        first_element = elements[0]
+        other_element = elements[1:]
+        first_elements.append(first_element)
+        Train_labels = np.array([label_mapping[label] for label in first_elements])
+        Train_labels_tensor = torch.tensor(Train_labels, dtype=torch.long)
+        other_elements.append(other_element)
+        Train_features = other_elements
+        Train_features = [[float(value) for value in sublist] for sublist in Train_features]
+        Train_features_tensor = torch.tensor(Train_features).float()
+        print('train done')
+
+with open(file3_path, 'r') as validation:
+    # Process file3 contents
+    lines = validation.readlines()
+    first_elements = []
+    other_elements = []
+    for line in lines:
+        elements = line.split()
+        first_element = elements[0]
+        other_element = elements[1:]
+        first_elements.append(first_element)
+        Valid_labels = np.array([label_mapping[label] for label in first_elements])
+        Valid_labels_tensor = torch.tensor(Valid_labels, dtype=torch.long)
+        other_elements.append(other_element)
+        Valid_features = other_elements
+        Valid_features = [[float(value) for value in sublist] for sublist in Valid_features]
+        Valid_features_tensor = torch.tensor(Valid_features).float()    
+        print('valid done')
+
+
+
+print(isinstance(Test_labels, np.ndarray))
+print(isinstance(Test_features, np.ndarray))
 
 # Assuming you have your features and labels as NumPy arrays
 # (Code for creating dummy data remains the same)
-
-# Convert NumPy arrays to PyTorch tensors
-features_tensor = torch.tensor(features).float()  # Convert to float
-labels_tensor = torch.tensor(labels, dtype=torch.long)  # Assuming integer labels
 
 # Create a custom neural network class
 class NeuralNetwork(nn.Module):
@@ -54,57 +110,79 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # Create a DataLoader for batch training
-dataset = TensorDataset(features_tensor, labels_tensor)
-dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+train_dataset = TensorDataset(Train_features_tensor, Train_labels_tensor)
+train_dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+
+# Create a DataLoader for validation
+valid_dataset = TensorDataset(Valid_features_tensor, Valid_labels_tensor)
+valid_dataloader = DataLoader(valid_dataset, batch_size=32, shuffle=False)
 
 # Training loop
-num_epochs = 50
-losses = []  # To store the losses for plotting
+num_epochs = 400
+train_losses = []  # To store the training losses for plotting
+valid_losses = []  # To store the validation losses for plotting
 kl_divergences = []  # To store KL divergences for plotting
 
+print('on to training now')
+
 for epoch in range(num_epochs):
-    epoch_loss = 0.0
+    # Training phase
+    model.train()
+    epoch_train_loss = 0.0
     kl_divergence = 0.0
 
-    for inputs, targets in dataloader:
+    for inputs, targets in train_dataloader:
         optimizer.zero_grad()
         outputs = model(inputs)
         log_outputs = torch.log(outputs + 1e-10)  # Add a small epsilon to avoid log(0)
 
-        # Construct target probabilities (convert class indices to one-hot vectors)
         target_probs = torch.zeros_like(outputs)
         target_probs.scatter_(1, targets.unsqueeze(1), 1.0)
 
-        # Calculate KL Divergence
         kl_divergence += nn.KLDivLoss()(log_outputs, target_probs)
 
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
 
-        epoch_loss += loss.item()
+        epoch_train_loss += loss.item()
 
-    avg_epoch_loss = epoch_loss / len(dataloader)
-    avg_kl_divergence = kl_divergence / len(dataloader)
+    avg_train_loss = epoch_train_loss / len(train_dataloader)
+    avg_kl_divergence = kl_divergence / len(train_dataloader)
 
-    losses.append(avg_epoch_loss)
+    train_losses.append(avg_train_loss)
     kl_divergences.append(avg_kl_divergence)
 
-    print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_epoch_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
+    print(f'Training - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
 
-# Plot the losses and KL divergence
-plt.figure(figsize=(12, 6))
-plt.subplot(1, 2, 1)
-plt.plot(losses, label='Loss')
-plt.title('Training Loss')
+    # Validation phase
+    model.eval()
+    epoch_valid_loss = 0.0
+
+    with torch.no_grad():
+        for inputs, targets in valid_dataloader:
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            epoch_valid_loss += loss.item()
+
+    avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
+    valid_losses.append(avg_valid_loss)
+
+    print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
+
+# Plot the losses and KL divergence for both training and validation
+plt.figure(figsize=(18, 6))
+
+plt.subplot(1, 3, 1)
+plt.plot(train_losses, label='Training Loss')
+plt.plot(valid_losses, label='Validation Loss')
+plt.title('Training and Validation Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend()
 
-# Convert the KL divergences to NumPy using detach()
+plt.subplot(1, 3, 2)
 kl_divergences_np = [value.detach().item() for value in kl_divergences]
-
-plt.subplot(1, 2, 2)
 plt.plot(kl_divergences_np, label='KL Divergence')
 plt.title('KL Divergence')
 plt.xlabel('Epoch')
@@ -113,15 +191,23 @@ plt.legend()
 
 plt.show()
 
-# Testing the model
+# Test the model
 model.eval()
 with torch.no_grad():
-    test_input = torch.tensor(features[0], dtype=torch.float32)
+    test_input = Test_features_tensor
     predicted_probs = model(test_input)
-    predicted_label = torch.argmax(predicted_probs).item()
+    predicted_labels = torch.argmax(predicted_probs, dim=1)
+    predicted_labels_array = predicted_labels.numpy()
 
-# Map predicted label back to original label
+    # Compare predicted labels to test labels
+    correct_predictions = (predicted_labels_array == Test_labels)
+    accuracy = (correct_predictions.sum() / len(Test_labels)) * 100
+
+    print(f"Percentage of correctness: {accuracy:.2f}%")
+
+# Map predicted labels back to original labels
 reverse_mapping = {v: k for k, v in label_mapping.items()}
-predicted_class = reverse_mapping[predicted_label]
+predicted_classes_name = [reverse_mapping[label.item()] for label in predicted_labels]
 
-print(f"Predicted class: {predicted_class}")
+print(f"Predicted classes: {predicted_classes_name}")
+
