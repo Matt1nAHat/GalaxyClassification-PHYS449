@@ -105,8 +105,6 @@ def saveFeatureVectors(csvPath='Objectlist.csv', outPath='galaxyDataset_1000ea.t
     # Open the CSV file
     with open(csvPath, 'r') as f:
         reader = csv.reader(f)
-        next(reader)  # Skip the header row
-        next(reader)  # Skip the second row
 
         # Open the output text file for writing
         with open(outPath, 'w') as out_file:
