@@ -89,7 +89,7 @@ def getFeatures(obj_ID, zoo):
 
     return feature_vector
 
-def saveFeatureVectors(csvPath, outPath):
+def saveFeatureVectors(csvPath='Objectlist.csv', outPath='galaxyDataset_1000ea.txt'):
     """
     This function reads a CSV file containing object IDs, retrieves the feature vectors for each object ID using the getFeatures function, 
     and writes the feature vectors to an output text file.
