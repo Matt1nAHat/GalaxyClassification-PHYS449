@@ -1,0 +1,8 @@
+# Much more data available with ZooSpec
+
+SELECT TOP 10000
+g.objid
+FROM Galaxy as G
+JOIN ZooSpec AS zs
+ON G.objid = zs.objid
+WHERE g.clean=1 and zs.nvote >= 10 and zs.p_el > 0.8
