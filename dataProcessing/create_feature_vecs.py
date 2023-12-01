@@ -1,4 +1,4 @@
 from featureVector import saveFeatureVectors
 from featureVector import getFeatures
 
-saveFeatureVectors('dataAcquisition\Object_IDs_and_classifications\GZ_mergers_296.csv', 'dataProcessing/featureVectors/merger_test.csv')
+saveFeatureVectors('dataAcquisition/Split_data_IDs/valid_50k.csv', 'dataProcessing/featureVectors/testFeatures_50k.txt')
