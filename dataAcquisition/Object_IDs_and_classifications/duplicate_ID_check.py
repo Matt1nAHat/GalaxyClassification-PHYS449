@@ -16,15 +16,22 @@
 #     print("No duplicate rows found")
 
 import pandas as pd
+import numpy as np
 
 # Load the CSV data into a pandas DataFrame
-df = pd.read_csv("dataAcquisition\Object_IDs_and_classifications\GZ_mergers_133.csv")
+df = pd.read_csv("dataAcquisition\Object_IDs_and_classifications\ZooSpec\combined_50k.csv")
 
 # Identify duplicate rows based on the first column
 duplicates = df.duplicated(subset=df.columns[0])
 
+# Find the row numbers of the duplicate values
+duplicate_rows = np.where(duplicates)[0]
+
 # Print a message if there are any duplicates
 if duplicates.any():
     print(f"There are {duplicates.sum()} duplicate values in the first column.")
+    # Print the row numbers of the duplicate values
+    print(f"Row numbers of duplicate values in the first column: {duplicate_rows}") 
+
 else:
     print("There are no duplicate values in the first column.")

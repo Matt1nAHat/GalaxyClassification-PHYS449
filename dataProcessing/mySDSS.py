@@ -64,7 +64,7 @@ class PhotoObj:
             zns.p_edge as edgeon, zns.p_mg as merger
         """
 
-        script = script + f"FROM PhotoObjAll as p JOIN ZooNoSpec AS zns ON p.objID=zns.objid AND p.objID={self.objID}"
+        script = script + f"FROM PhotoObjAll as p JOIN ZooSpec AS zns ON p.objID=zns.objid AND p.objID={self.objID}"
         df = sql2df(script)
         if len(df)>0:
             float_cols = ['ra','dec','u','g','r','i','z','deVAB_u','deVAB_g','deVAB_r','deVAB_i','deVAB_z','expAB_u','expAB_g','expAB_r',
