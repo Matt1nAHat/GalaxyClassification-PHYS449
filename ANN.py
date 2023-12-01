@@ -80,14 +80,16 @@ print(isinstance(Test_features, np.ndarray))
 
 # Create a custom neural network class
 class NeuralNetwork(nn.Module):
-    def __init__(self, input_size, hidden_size1, hidden_size2, output_size):
+    def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
         super(NeuralNetwork, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size1).float()  # Set dtype to float
+        self.fc1 = nn.Linear(input_size, hidden_size1).float()
         self.relu1 = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size1, hidden_size2).float()  # Set dtype to float
+        self.fc2 = nn.Linear(hidden_size1, hidden_size2).float()
         self.relu2 = nn.ReLU()
-        self.fc3 = nn.Linear(hidden_size2, output_size).float()  # Set dtype to float
-        self.softmax = nn.Softmax(dim=-1)  # Use dim=-1 to infer the correct dimension
+        self.fc3 = nn.Linear(hidden_size2, hidden_size3).float()
+        self.relu3 = nn.ReLU()
+        self.fc4 = nn.Linear(hidden_size3, output_size).float()
+        self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, x):
         x = self.fc1(x)
@@ -95,17 +97,20 @@ class NeuralNetwork(nn.Module):
         x = self.fc2(x)
         x = self.relu2(x)
         x = self.fc3(x)
+        x = self.relu3(x)
+        x = self.fc4(x)
         x = self.softmax(x)
         return x
 
 # Define hyperparameters
 input_size = 25
-hidden_size1 = 50
-hidden_size2 = 30
+hidden_size1 = 20
+hidden_size2 = 20
+hidden_size3 = 20
 output_size = 4  # Number of classes
 
 # Create the neural network, loss function, and optimizer
-model = NeuralNetwork(input_size, hidden_size1, hidden_size2, output_size)
+model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
