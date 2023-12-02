@@ -24,18 +24,21 @@ def txtToList(filePath):
             
 
 trainPath = './dataProcessing/processedData/trainPCAList.txt'
+trainPath = './dataProcessing/processedData/PCA_50k_train.txt'
 trainFeatures, trainLabels = txtToList(trainPath)
 testPath = './dataProcessing/processedData/testPCAList.txt'
+trainPath = './dataProcessing/processedData/PCA_50k_test.txt'
 testFeatures, testLabels = txtToList(testPath)
 validPath = './dataProcessing/processedData/validPCAList.txt'
+validPath = './dataProcessing/processedData/PCA_50k_valid.txt'
 validFeatures, validLabels = txtToList(validPath)
 
 # Step 2: Train model
 # Initialize the ExtraTreesClassifier
 clf = ExtraTreesClassifier(
-    n_estimators=10, 
+    n_estimators=50, 
     criterion='gini', 
-    max_depth=20, 
+    max_depth=10, 
     min_samples_split=2, 
     min_samples_leaf=1, 
     min_weight_fraction_leaf=0.0, 
@@ -72,12 +75,11 @@ validAccuracy = clf.score(validFeatures, validLabels)
 print(f"Validation (10% of Data) Accuracy: {validAccuracy}")
 
 # Write All accuracies to a file, ET_accuracies.txt
-with open('./ET_accuracies.txt', 'w') as f:
+with open('./ET_Results/ET_accuracies.txt', 'w') as f:
     f.write(f"""Training   (70% of Data) Accuracy: {trainAccuracy}
 Testing    (20% of Data) Accuracy: {testAccuracy}
 Validation (10% of Data) Accuracy: {validAccuracy}""")
 
-# Step 5: Save model
-# Save the model for future use
-with open('trained_ET_model.pkl', 'wb') as f:
+# Step 5: Save model as pickel file for future use
+with open('./ET_Results/trained_ET_model.pkl', 'wb') as f:
     pickle.dump(clf, f)
