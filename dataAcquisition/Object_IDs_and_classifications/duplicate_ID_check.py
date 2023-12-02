@@ -19,7 +19,7 @@ import pandas as pd
 import numpy as np
 
 # Load the CSV data into a pandas DataFrame
-df = pd.read_csv("dataAcquisition\Object_IDs_and_classifications\ZooSpec\combined_50k.csv")
+df = pd.read_csv("dataAcquisition\Object_IDs_and_classifications\ZooSpec\combined_85k.csv")
 
 # Identify duplicate rows based on the first column
 duplicates = df.duplicated(subset=df.columns[0])

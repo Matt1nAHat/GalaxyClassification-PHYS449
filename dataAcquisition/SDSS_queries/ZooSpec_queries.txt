@@ -1,4 +1,4 @@
-# Much more data available with ZooSpec
+-- Much more data available with ZooSpec
 
 SELECT TOP 10000
 g.objid
