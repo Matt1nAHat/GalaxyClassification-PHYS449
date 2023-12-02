@@ -33,8 +33,8 @@ validPath = './dataProcessing/processedData/validPCAList.txt'
 validPath = './dataProcessing/processedData/PCA_50k_valid.txt'
 validFeatures, validLabels = txtToList(validPath)
 
-depthRange = range(10, 100, 10)
-numOfTreesRange = range(10, 100, 10)
+depthRange = range(1, 20, 1)
+numOfTreesRange = range(10, 150, 10)
 validationResults = []
 
 for depth in depthRange:
@@ -69,7 +69,6 @@ for depth in depthRange:
         trainAccuracy = clf.score(trainFeatures, trainLabels)
         
 
-
         # Step 3: Evaluate model
         # Evaluate the model using the testing data
         testAccuracy = clf.score(testFeatures, testLabels)
@@ -100,13 +99,14 @@ ax = fig.add_subplot(111, projection='3d')
 depthRange, numOfTreesRange = np.meshgrid(depthRange, numOfTreesRange)
 # Convert validationResults to a numpy array
 validationResults = np.array(validationResults)
+validationResults = validationResults.transpose()
 
 # Now you can plot the surface
-ax.plot_surface(depthRange, numOfTreesRange, validationResults)
+ax.plot_surface(numOfTreesRange, depthRange, validationResults)
 
 # Set labels
-ax.set_xlabel('Depth Range')
-ax.set_ylabel('Number of Trees Range')
+ax.set_ylabel('Depth')
+ax.set_xlabel('Number of Trees')
 ax.set_zlabel('Validation Results')
 
 # Show the plot
