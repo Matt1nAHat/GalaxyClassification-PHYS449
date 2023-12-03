@@ -1,7 +1,39 @@
+import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.decomposition import PCA
 import numpy as np
+import matplotlib.pyplot as plt
 
+# This function assumes that 'train' returns the loss at each epoch
+def plot(components, variance):
+    """
+    This function generates a line plot of the variance in data over a specified number of components. 
+    The plot is saved as a PDF in the specified output directory.
+
+    Args:
+    - epochs (int): The total number of components to test PCA on.
+    - variance (list or np.array): A list or array containing the variance for each component.
+    - output_dir (str): The directory where the plot PDF should be saved.
+
+    Returns:
+    Plot of the loss saved as PDFs in the output directory.
+    """
+    # Generate the plot
+    plt.plot(range(components), variance)
+    plt.xlabel('No. of Components')
+    plt.ylabel('Variance in Data (%)')
+    plt.title('Total Variance Accounted by No. of Components')
+
+    # Draw a horizontal line at the paper's variance
+    plt.axhline(y=97.4, color='red', linestyle='--')
+
+    # Add a label to the line
+    plt.text(0, 97.4, 'Paper variance', color='red', va='bottom')
+
+    # Save the plot to a file
+    plt.savefig('pca_plots.png')
+    plt.close()
+     
 def performPCA(path, outPath):
 
     # Load the data from the text file into a 2D numpy array
@@ -52,9 +84,41 @@ def performPCA(path, outPath):
     standardized_features = scaler.fit_transform(features)
 
     # Perform PCA
-    pca = PCA(n_components=25)
-    pca.fit(standardized_features)
-    transformed_features = pca.transform(standardized_features)
+    pcaVariance = []
+    for i in range(1, 26):
+        pca = PCA(n_components=i)
+        pca.fit(standardized_features)
+        transformed_features = pca.transform(standardized_features)
+
+        # Calculate the cumulative sum of the explained variance ratios
+        cumulative_explained_variance = np.cumsum(pca.explained_variance_ratio_)
+
+        # Print the total explained variance for the first 25 components
+        pcaVariance.append(cumulative_explained_variance[-1]*100)
+    print(cumulative_explained_variance[-1]*100)
+    # Plot the variance
+    plot(25, pcaVariance)
+
+    #Creating PCA component list
+
+    # Open the file and read the lines
+    with open('features.txt', 'r') as f:
+        next(f)  # Skip headers
+        next(f)
+        next(f)
+        feature_names = f.read().splitlines()
+
+    # Create a DataFrame for all the PCA components
+    components_df = pd.DataFrame(pca.components_, columns=feature_names)
+
+    # Replace the weights with the feature names
+    components_df = components_df.apply(lambda row: pd.Series(row.nlargest(5).index), axis=1)
+
+    # Create a new Excel writer object
+    with pd.ExcelWriter('pca_components.xlsx') as writer:
+        # Write the DataFrame to the Excel file
+        components_df.to_excel(writer, header=False)
+
 
     # Renormalize the PCA components
     scaler = MinMaxScaler()
