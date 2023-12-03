@@ -1,8 +1,8 @@
 import numpy as np
-
 from sklearn.ensemble import ExtraTreesClassifier
-
 import pickle
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 # Step 1: Load data
 def txtToList(filePath):
@@ -33,53 +33,90 @@ validPath = './dataProcessing/processedData/validPCAList.txt'
 validPath = './dataProcessing/processedData/PCA_50k_valid.txt'
 validFeatures, validLabels = txtToList(validPath)
 
-# Step 2: Train model
-# Initialize the ExtraTreesClassifier
-clf = ExtraTreesClassifier(
-    n_estimators=50, 
-    criterion='gini', 
-    max_depth=10, 
-    min_samples_split=2, 
-    min_samples_leaf=1, 
-    min_weight_fraction_leaf=0.0, 
-    max_features=1, 
-    max_leaf_nodes=None, 
-    min_impurity_decrease=0.0, 
-    bootstrap=False,
-    oob_score=False,
-    n_jobs=None, 
-    random_state=None, 
-    verbose=0, 
-    warm_start=False, 
-    class_weight=None)
+depthRange = range(1, 20, 1)
+numOfTreesRange = range(10, 150, 10)
+validationResults = []
+
+for depth in depthRange:
+    validationRow = []
+    for num_of_trees in numOfTreesRange:
+        # Step 2: Train model (initialize, fit)
+        # Initialize the ExtraTreesClassifier
+        clf = ExtraTreesClassifier(
+            n_estimators=num_of_trees, 
+            criterion='gini', 
+            max_depth=depth, 
+            min_samples_split=2, 
+            min_samples_leaf=1, 
+            min_weight_fraction_leaf=0.0, 
+            max_features=1, 
+            max_leaf_nodes=None, 
+            min_impurity_decrease=0.0, 
+            bootstrap=False,
+            oob_score=False,
+            n_jobs=None, 
+            random_state=None, 
+            verbose=0, 
+            warm_start=False, 
+            class_weight=None)
+
+        # Fit the model using the training data
+        clf.fit(trainFeatures, trainLabels)
+
+        inference = clf.predict(trainFeatures)
+        # print(inference[0:10])
+        # print(trainLabels[0:10])
+        trainAccuracy = clf.score(trainFeatures, trainLabels)
+        
+
+        # Step 3: Evaluate model
+        # Evaluate the model using the testing data
+        testAccuracy = clf.score(testFeatures, testLabels)
 
 
-# Fit the model using the training data
-clf.fit(trainFeatures, trainLabels)
+        # Step 4: Validation
+        # Evaluate the model using the validation data
+        validAccuracy = clf.score(validFeatures, validLabels)
+        validationRow.append(round(validAccuracy, 5))
 
-inference = clf.predict(trainFeatures)
-# print(inference[0:10])
-# print(trainLabels[0:10])
-trainAccuracy = clf.score(trainFeatures, trainLabels)
-print(f"Training   (70% of Data) Accuracy: {trainAccuracy}")
+        ResultsString = f"""Training   (70% of Data) Accuracy: {trainAccuracy}
+        Testing    (10% of Data) Accuracy: {testAccuracy}
+        Validation (20% of Data) Accuracy: {validAccuracy}"""
+        
+        # print(f"Depth: {depth}, Num of Trees: {num_of_trees}")
+        # print(ResultsString)
+    validationResults.append(validationRow)
 
-# Step 3: Evaluate model
+# Step 5: Plot validation results
 
-# Evaluate the model using the testing data
-testAccuracy = clf.score(testFeatures, testLabels)
-print(f"Testing    (20% of Data) Accuracy: {testAccuracy}")
+# Create a figure
+fig = plt.figure()
 
-# Step 4: Validation
-# Evaluate the model using the validation data
-validAccuracy = clf.score(validFeatures, validLabels)
-print(f"Validation (10% of Data) Accuracy: {validAccuracy}")
+# Create a 3D subplot
+ax = fig.add_subplot(111, projection='3d')
+
+# Create a meshgrid for depthRange and numOfTreesRange
+depthRange, numOfTreesRange = np.meshgrid(depthRange, numOfTreesRange)
+# Convert validationResults to a numpy array
+validationResults = np.array(validationResults)
+validationResults = validationResults.transpose()
+
+# Now you can plot the surface
+ax.plot_surface(numOfTreesRange, depthRange, validationResults)
+
+# Set labels
+ax.set_ylabel('Depth')
+ax.set_xlabel('Number of Trees')
+ax.set_zlabel('Validation Results')
+
+# Show the plot
+plt.show()
+
 
 # Write All accuracies to a file, ET_accuracies.txt
 with open('./ET_Results/ET_accuracies.txt', 'w') as f:
-    f.write(f"""Training   (70% of Data) Accuracy: {trainAccuracy}
-Testing    (20% of Data) Accuracy: {testAccuracy}
-Validation (10% of Data) Accuracy: {validAccuracy}""")
+    f.write(ResultsString)
 
-# Step 5: Save model as pickel file for future use
+# Step 6: Save model as pickel file for future use
 with open('./ET_Results/trained_ET_model.pkl', 'wb') as f:
     pickle.dump(clf, f)
