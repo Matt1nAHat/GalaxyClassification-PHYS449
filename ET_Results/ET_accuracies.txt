@@ -1,0 +1,3 @@
+Training   (70% of Data) Accuracy: 0.9302147673825579
+        Testing    (10% of Data) Accuracy: 0.10456852791878173
+        Validation (20% of Data) Accuracy: 0.20832920178482894

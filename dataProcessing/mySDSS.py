@@ -60,11 +60,12 @@ class PhotoObj:
             p.lnLexp_i, p.lnLexp_z, p.mE2_u, p.mE2_g, p.mE2_r, p.mE2_i, p.mE2_z, p.mE1_u, p.mE1_g, p.mE1_r, p.mE1_i, p.mE1_z, p.mRrCc_u, p.mRrCc_g, p.mRrCc_r, p.mRrCc_i, p.mRrCc_z, p.mCr4_u,
             p.mCr4_g, p.mCr4_r, p.mCr4_i, p.mCr4_z, p.fiberMag_u, p.fiberMag_g, p.fiberMag_r, p.fiberMag_i, p.fiberMag_z, p.modelMag_u, p.modelMag_g, p.modelMag_r, p.modelMag_i,
             p.modelMag_z, p.petroMag_u, p.petroMag_g, p.petroMag_r, p.petroMag_i, p.petroMag_z, p.petroR50_u, p.petroR50_g, p.petroR50_r, p.petroR50_i, p.petroR50_z, p.petroR90_u,
-            p.petroR90_g, p.petroR90_r, p.petroR90_i, p.petroR90_z, zns.nvote, zns.p_el as elliptical, zns.p_cw as spiralclock, zns.p_acw as spiralanticlock, 
-            zns.p_edge as edgeon, zns.p_mg as merger
+            p.petroR90_g, p.petroR90_r, p.petroR90_i, p.petroR90_z, zs.nvote, zs.p_el as elliptical, zs.p_cw as spiralclock, zs.p_acw as spiralanticlock, 
+            zs.p_edge as edgeon, zs.p_mg as merger
         """
 
-        script = script + f"FROM PhotoObjAll as p JOIN ZooNoSpec AS zns ON p.objID=zns.objid AND p.objID={self.objID}"
+        script = script + f"FROM PhotoObjAll as p JOIN ZooSpec AS zs ON p.objID=zs.objid AND p.objID={self.objID}" 
+        
         df = sql2df(script)
         if len(df)>0:
             float_cols = ['ra','dec','u','g','r','i','z','deVAB_u','deVAB_g','deVAB_r','deVAB_i','deVAB_z','expAB_u','expAB_g','expAB_r',
