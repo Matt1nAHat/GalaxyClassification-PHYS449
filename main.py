@@ -7,9 +7,11 @@ def main():
     # Create the parser
     parser = argparse.ArgumentParser(description="Provide hyperparameters & dataset filepaths.")
 
-    # Add the arguments
-    parser.add_argument('run_ET', type=bool, help='Run the ET model; specify hyperparameters and/or datasets or neither for default values.') # ET
-    parser.add_argument('run_ANN', type=bool, help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
+    # Add the arguments. First 4 are whether to run SQL, PCA, ET, or ANN. The rest are hyperparameters and/or dataset filepaths.
+    parser.add_argument('SQL', type=bool, help='Run the SQL script to obtain the data from the database.') # SQL
+    parser.add_argument('PCA', type=bool, help='Run the PCA script to obtain the PCA data from the raw data.') # PCA
+    parser.add_argument('ET', type=bool, help='Run the ET model; specify hyperparameters and/or datasets or neither for default values.') # ET
+    parser.add_argument('ANN', type=bool, help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
     # ET arguments
     parser.add_argument('TRAIN_PATH', type=str, help='The path to the training dataset')
     parser.add_argument('TEST_PATH', type=str, help='The path to the testing dataset')
@@ -23,8 +25,10 @@ def main():
     
     # Execute the parse_args() method, obtain whether to run ET or ANN
     args = parser.parse_args()
-    run_ET = args.run_ET
-    run_ANN = args.run_ANN
+    run_SQL = args.SQL
+    run_PCA = args.PCA
+    run_ET = args.ET
+    run_ANN = args.ANN
     
     # If Extra Trees is chosen:
     if run_ET:
