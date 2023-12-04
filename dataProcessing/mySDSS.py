@@ -7,8 +7,9 @@ from sdss.refs import photo_types
 This is a modified version of the PhotoObj class from the objects.py file in the original sdss package.
 Minor changes have been made to suit the specific needs of this project, namely changes to the download
 and init functions so that additional measurements could be pulled from the database to create our feature 
-vector. As such the code in this file will not be commented as it is not original work.
+vector. As such the code in this file will not be commented as it is not original work unless specific changes have been made.
 """
+
 
 class PhotoObj:
     def __init__(self, objID):
@@ -63,11 +64,12 @@ class PhotoObj:
             p.petroR90_g, p.petroR90_r, p.petroR90_i, p.petroR90_z, zs.nvote, zs.p_el as elliptical, zs.p_cw as spiralclock, zs.p_acw as spiralanticlock, 
             zs.p_edge as edgeon, zs.p_mg as merger
         """
-
+        #ZooSpec table has been added to include additional measurements (From Jakob Devey)
         script = script + f"FROM PhotoObjAll as p JOIN ZooSpec AS zs ON p.objID=zs.objid AND p.objID={self.objID}" 
         
         df = sql2df(script)
         if len(df)>0:
+            #Additional measurements added (From Matthew Charbonneau)
             float_cols = ['ra','dec','u','g','r','i','z','deVAB_u','deVAB_g','deVAB_r','deVAB_i','deVAB_z','expAB_u','expAB_g','expAB_r',
                           'expAB_i','expAB_z','lnLstar_u','lnLstar_g','lnLstar_r','lnLstar_i','lnLstar_z','lnLdeV_u','lnLdeV_g','lnLdeV_r',
                           'lnLdeV_i','lnLdeV_z','mE2_u','mE2_g','mE2_r','mE2_i','mE2_z','mE1_u','mE1_g','mE1_r','mE1_i','mE1_z','mRrCc_u',
@@ -125,6 +127,7 @@ class PhotoObj:
         script = script + f"FROM PhotoObj WHERE objID={self.objID}"
         df = sql2df(script)
         if len(df)>0:
+            #Additional measurements added (From Matthew Charbonneau)
             float_cols = ['ra','dec','u','g','r','i','z','deVAB_u','deVAB_g','deVAB_r','deVAB_i','deVAB_z','expAB_u','expAB_g','expAB_r',
                           'expAB_i','expAB_z','lnLstar_u','lnLstar_g','lnLstar_r','lnLstar_i','lnLstar_z','lnLdeV_u','lnLdeV_g','lnLdeV_r',
                           'lnLdeV_i','lnLdeV_z','mE2_u','mE2_g','mE2_r','mE2_i','mE2_z','mE1_u','mE1_g','mE1_r','mE1_i','mE1_z','mRrCc_u',
