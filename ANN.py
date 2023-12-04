@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
 # Specify the path to the 'processedData' folder
 data_folder = os.path.join('dataProcessing', 'processedData')
@@ -213,6 +214,25 @@ with torch.no_grad():
 # Map predicted labels back to original labels
 reverse_mapping = {v: k for k, v in label_mapping.items()}
 predicted_classes_name = [reverse_mapping[label.item()] for label in predicted_labels]
+
+# Calculate confusion matrix
+confusion_mat = confusion_matrix(Test_labels, predicted_labels_array)
+
+# Calculate precision, recall, and F-score for each class
+precision = precision_score(Test_labels, predicted_labels_array, average=None)
+recall = recall_score(Test_labels, predicted_labels_array, average=None)
+f_score = f1_score(Test_labels, predicted_labels_array, average=None)
+
+# Print the confusion matrix and performance metrics
+print("Confusion Matrix:")
+print(confusion_mat)
+print("")
+
+print("Performance Metrics:")
+print(f"Elliptical - Precision: {precision[0]:.2f}, Recall: {recall[0]:.2f}, F-score: {f_score[0]:.2f}")
+print(f"Merger - Precision: {precision[1]:.2f}, Recall: {recall[1]:.2f}, F-score: {f_score[1]:.2f}")
+print(f"Spiral - Precision: {precision[2]:.2f}, Recall: {recall[2]:.2f}, F-score: {f_score[2]:.2f}")
+print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
 
 print(f"Predicted classes: {predicted_classes_name}")
 
