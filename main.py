@@ -6,6 +6,7 @@ import pickle
 from dataProcessing.featureVector import saveFeatureVectors
 from dataProcessing.PCA import performPCA 
 import dataProcessing.mySDSS
+from ANN_4_main import ANN
 
 if __name__ == "__main__":
     # Create the parser
@@ -23,7 +24,15 @@ if __name__ == "__main__":
     parser.add_argument('--NUM_OF_TREES', type=int, help='The number of trees in the forest')
     parser.add_argument('--VERBOSE', type=bool, help='The verbosity of the model')
     # ANN arguments
-    parser.add_argument('--NUM_EPOCHS', type=int, help='The number of epochs to train the model for')
+    parser.add_argument('--EPOCHS', type=int, default=10, help='Number of epochs for training')
+    parser.add_argument('--HS1', type=int, default=12, help='Number of neurons in the first hidden layer')
+    parser.add_argument('--HS2', type=int, default=24, help='Number of neurons in the second hidden layer')
+    parser.add_argument('--HS3', type=int, default=16, help='Number of neurons in the third hidden layer')
+    parser.add_argument('--LR', type=float, default=0.001, help='Learning rate')
+    parser.add_argument('--WD', type=float, default=0.0001, help='Weight decay')
+    parser.add_argument('--BATCH_SIZE', type=int, default=32, help='Batch size for training')
+    parser.add_argument('-v', type=bool, default=False, help='Print out loss plots')
+
     # Preprocess arguments
     parser.add_argument("--OBJ_LIST", default="dataAcquisition/Split_data_IDs/test.csv", help="path to the object list you want to process")
     parser.add_argument("--FEATURE_OUT", default="dataProcessing/featureVectors/featuresList.txt", help="path to save the feature vectors")
@@ -62,9 +71,17 @@ if __name__ == "__main__":
         ETModel(TRAIN_PATH, TEST_PATH, VALID_PATH, DEPTH, NUM_OF_TREES, VERBOSE)
 
     if run_ANN:
-        # Code here for ANN
-        print("change your code to a function named ANNModel that takes in parameters from here instead")
-        #ANNModel(args.NUM_EPOCHS)
+        # Parse the ANN arguments
+        EPOCHS = args.EPOCHS
+        HS1 = args.HS1
+        HS2 = args.HS2
+        HS3 = args.HS3
+        LR = args.LR
+        WD = args.WD
+        BATCH_SIZE = args.BATCH_SIZE
+        VERBOSE = args.v
+
+        ANN(EPOCHS, HS1, HS2, HS3, LR, WD, BATCH_SIZE, VERBOSE)     
 
 
     # If PROCESS is chosen:

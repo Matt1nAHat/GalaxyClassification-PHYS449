@@ -9,7 +9,7 @@ import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 import argparse
 
-def main():
+def ANN():
     # Create parser
     parser = argparse.ArgumentParser(description='ANN for Galaxy Morphology Classification')
     parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
@@ -22,7 +22,6 @@ def main():
 
     # Parse arguments
     args = parser.parse_args()
-
 
     # Specify the path to the 'processedData' folder
     data_folder = os.path.join('dataProcessing', 'processedData')
@@ -45,8 +44,6 @@ def main():
     Test_features = df.drop(0, axis=1).values.astype(float)
     Test_features_tensor = torch.tensor(Test_features).float()
 
-    print('test done')
-
     # Process Training file
     # Read the file into a pandas DataFrame
     df = pd.read_csv(file2_path, delim_whitespace=True, header=None)
@@ -57,8 +54,6 @@ def main():
 
     Train_features = df.drop(0, axis=1).values.astype(float)
     Train_features_tensor = torch.tensor(Train_features).float()
-
-    print('train done')
 
     # Process Validation file
     # Read the file into a pandas DataFrame
@@ -71,7 +66,7 @@ def main():
     Valid_features = df.drop(0, axis=1).values.astype(float)
     Valid_features_tensor = torch.tensor(Valid_features).float()
 
-    print('valid done')
+    print('Data processing done')
 
     # Assuming you have your features and labels as NumPy arrays
     # (Code for creating dummy data remains the same)
@@ -142,7 +137,7 @@ def main():
             target_probs = torch.zeros_like(outputs)
             target_probs.scatter_(1, targets.unsqueeze(1), 1.0)
 
-            kl_divergence += nn.KLDivLoss()(log_outputs, target_probs)
+            kl_divergence += nn.KLDivLoss(reduction='batchmean')(log_outputs, target_probs)
 
             loss = criterion(outputs, targets)
             loss.backward()
@@ -156,7 +151,7 @@ def main():
         train_losses.append(avg_train_loss)
         kl_divergences.append(avg_kl_divergence)
 
-        print(f'Training - Epoch: [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
+        print(f'Training - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
 
         # Validation phase
         model.eval()
@@ -174,7 +169,7 @@ def main():
         print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
 
     # Plot the losses and KL divergence for both training and validation
-    plt.figure(figsize=(18, 6))
+    plt.figure(figsize=(10, 6))
 
     plt.subplot(1, 3, 1)
     plt.plot(train_losses, label='Training Loss')
@@ -192,6 +187,7 @@ def main():
     plt.ylabel('KL Divergence')
     plt.legend()
 
+    plt.savefig(f'ANN_Results\loss_wd{args.wd}_lr{args.lr}_HS{args.hidden_size_1}-{args.hidden_size_2}-{args.hidden_size_3}.png')
     plt.show()
 
     # Test the model
@@ -206,8 +202,6 @@ def main():
         correct_predictions = (predicted_labels_array == Test_labels)
         accuracy = (correct_predictions.sum() / len(Test_labels)) * 100
 
-        print(f"Percentage of correctness: {accuracy:.2f}%")
-
     # Map predicted labels back to original labels
     reverse_mapping = {v: k for k, v in label_mapping.items()}
     predicted_classes_name = [reverse_mapping[label.item()] for label in predicted_labels]
@@ -216,7 +210,7 @@ def main():
     confusion_mat = confusion_matrix(Test_labels, predicted_labels_array)
 
     # Calculate precision, recall, and F-score for each class
-    precision = precision_score(Test_labels, predicted_labels_array, average=None)
+    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=0.01)
     recall = recall_score(Test_labels, predicted_labels_array, average=None)
     f_score = f1_score(Test_labels, predicted_labels_array, average=None)
 
@@ -230,8 +224,7 @@ def main():
     print(f"Merger - Precision: {precision[1]:.2f}, Recall: {recall[1]:.2f}, F-score: {f_score[1]:.2f}")
     print(f"Spiral - Precision: {precision[2]:.2f}, Recall: {recall[2]:.2f}, F-score: {f_score[2]:.2f}")
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
+    print(f"Percentage of correctness: {accuracy:.2f}%")
 
-    # print(f"Predicted classes: {predicted_classes_name}")
-
-if __name__ == '__main__':
-    main()
+if __name__ == '__ANN__':
+    ANN()

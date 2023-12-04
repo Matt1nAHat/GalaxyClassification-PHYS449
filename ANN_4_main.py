@@ -9,33 +9,21 @@ import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 import argparse
 
-def main():
-    # Create parser
-    parser = argparse.ArgumentParser(description='ANN for Galaxy Morphology Classification')
-    parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
-    parser.add_argument('--hidden_size_1', type=int, default=12, help='Number of neurons in the first hidden layer')
-    parser.add_argument('--hidden_size_2', type=int, default=24, help='Number of neurons in the second hidden layer')
-    parser.add_argument('--hidden_size_3', type=int, default=16, help='Number of neurons in the third hidden layer')
-    parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--wd', type=float, default=0.0001, help='Weight decay')
-    parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
-
-    # Parse arguments
-    args = parser.parse_args()
+def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
     # Specify the path to the 'processedData' folder
     data_folder = os.path.join('dataProcessing', 'processedData')
 
     # Import the three text files from the 'processedData' folder
-    file1_path = os.path.join(data_folder, 'PCA_85K_test.txt')
-    file2_path = os.path.join(data_folder, 'PCA_85k_train.txt')
-    file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
+    test_path = os.path.join(data_folder, 'PCA_85K_test.txt')
+    train_path = os.path.join(data_folder, 'PCA_85k_train.txt')
+    valid_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
 
     label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
 
     # Process Test file
     # Read the file into a pandas DataFrame
-    df = pd.read_csv(file1_path, delim_whitespace=True, header=None)
+    df = pd.read_csv(test_path, delim_whitespace=True, header=None)
 
     # Process the DataFrame
     Test_labels = df[0].map(label_mapping).values
@@ -46,7 +34,7 @@ def main():
 
     # Process Training file
     # Read the file into a pandas DataFrame
-    df = pd.read_csv(file2_path, delim_whitespace=True, header=None)
+    df = pd.read_csv(train_path, delim_whitespace=True, header=None)
 
     # Process the DataFrame
     Train_labels = df[0].map(label_mapping).values
@@ -57,7 +45,7 @@ def main():
 
     # Process Validation file
     # Read the file into a pandas DataFrame
-    df = pd.read_csv(file3_path, delim_whitespace=True, header=None)
+    df = pd.read_csv(valid_path, delim_whitespace=True, header=None)
 
     # Process the DataFrame
     Valid_labels = df[0].map(label_mapping).values
@@ -97,26 +85,26 @@ def main():
 
     # Define hyperparameters
     input_size = 25
-    hidden_size1 = args.hidden_size_1
-    hidden_size2 = args.hidden_size_2
-    hidden_size3 = args.hidden_size_3
+    hidden_size1 = hidden_1
+    hidden_size2 = hidden_2
+    hidden_size3 = hidden_3
     output_size = 4  # Number of classes
 
     # Create the neural network, loss function, and optimizer
     model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)
+    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
 
     # Create a DataLoader for batch training
     train_dataset = TensorDataset(Train_features_tensor, Train_labels_tensor)
-    train_dataloader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
     # Create a DataLoader for validation
     valid_dataset = TensorDataset(Valid_features_tensor, Valid_labels_tensor)
-    valid_dataloader = DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False)
+    valid_dataloader = DataLoader(valid_dataset, batch_size=batch_size, shuffle=False)
 
     # Training loop
-    num_epochs = args.epochs
+    num_epochs = epochs
     train_losses = []  # To store the training losses for plotting
     valid_losses = []  # To store the validation losses for plotting
     kl_divergences = []  # To store KL divergences for plotting
@@ -151,7 +139,8 @@ def main():
         train_losses.append(avg_train_loss)
         kl_divergences.append(avg_kl_divergence)
 
-        print(f'Training - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
+        if verbose:
+            print(f'Training - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
 
         # Validation phase
         model.eval()
@@ -166,29 +155,31 @@ def main():
         avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
         valid_losses.append(avg_valid_loss)
 
-        print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
+        if verbose:
+            print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
 
-    # Plot the losses and KL divergence for both training and validation
-    plt.figure(figsize=(10, 6))
+    if verbose:
+        # Plot the losses and KL divergence for both training and validation
+        plt.figure(figsize=(10, 6))
 
-    plt.subplot(1, 3, 1)
-    plt.plot(train_losses, label='Training Loss')
-    plt.plot(valid_losses, label='Validation Loss')
-    plt.title('Training and Validation Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.legend()
+        plt.subplot(1, 3, 1)
+        plt.plot(train_losses, label='Training Loss')
+        plt.plot(valid_losses, label='Validation Loss')
+        plt.title('Training and Validation Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.legend()
 
-    plt.subplot(1, 3, 2)
-    kl_divergences_np = [value.detach().item() for value in kl_divergences]
-    plt.plot(kl_divergences_np, label='KL Divergence')
-    plt.title('KL Divergence')
-    plt.xlabel('Epoch')
-    plt.ylabel('KL Divergence')
-    plt.legend()
+        plt.subplot(1, 3, 2)
+        kl_divergences_np = [value.detach().item() for value in kl_divergences]
+        plt.plot(kl_divergences_np, label='KL Divergence')
+        plt.title('KL Divergence')
+        plt.xlabel('Epoch')
+        plt.ylabel('KL Divergence')
+        plt.legend()
 
-    plt.savefig(f'ANN_Results\loss_wd{args.wd}_lr{args.lr}_HS{args.hidden_size_1}-{args.hidden_size_2}-{args.hidden_size_3}.png')
-    plt.show()
+        plt.savefig(f'ANN_Results\loss_wd{wd}_lr{lr}_HS{hidden_1}-{hidden_2}-{hidden_3}.png')
+        plt.show()
 
     # Test the model
     model.eval()
@@ -226,5 +217,5 @@ def main():
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
     print(f"Percentage of correctness: {accuracy:.2f}%")
 
-if __name__ == '__main__':
-    main()
+if __name__ == '__ANN__':
+    ANN()
