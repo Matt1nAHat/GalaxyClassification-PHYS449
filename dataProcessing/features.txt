@@ -1,5 +1,5 @@
-# These are all of the features in the feature vector and how to calculate them using
-    the features pulled form SDSS-DR16
+# These are all of the feature labels in the feature vector 
+# This file is used as the labels when determining the PCA contributions
 
 fibercolour_u-g
 fibercolour_g-r
