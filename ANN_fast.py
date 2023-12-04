@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--hidden_size_2', type=int, default=24, help='Number of neurons in the second hidden layer')
     parser.add_argument('--hidden_size_3', type=int, default=16, help='Number of neurons in the third hidden layer')
     parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
+    parser.add_argument('--wd', type=float, default=0.0001, help='Weight decay')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
 
     # Parse arguments
@@ -114,7 +115,7 @@ def main():
     # Create the neural network, loss function, and optimizer
     model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
     criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)
 
     # Create a DataLoader for batch training
     train_dataset = TensorDataset(Train_features_tensor, Train_labels_tensor)
