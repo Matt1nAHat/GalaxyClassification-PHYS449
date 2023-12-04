@@ -14,9 +14,9 @@ import argparse
 data_folder = os.path.join('dataProcessing', 'processedData')
 
 # Import the three text files from the 'processedData' folder
-file1_path = os.path.join(data_folder, 'PCA_85K_test.txt')
-file2_path = os.path.join(data_folder, 'PCA_85k_train.txt')
-file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
+file1_path = os.path.join(data_folder, 'testPCAList.txt')
+file2_path = os.path.join(data_folder, 'trainPCAList.txt')
+file3_path = os.path.join(data_folder, 'validPCAList.txt')
 
 label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
 
