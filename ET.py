@@ -4,7 +4,7 @@ import pickle
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt', 
+def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt', 
     testPath = './dataProcessing/processedData/testPCAList.txt',
     validPath = './dataProcessing/processedData/validPCAList.txt',
     depthRange = [10],
@@ -125,5 +125,3 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     # Step 6: Save model as pickel file for future use
     with open('./ET_Results/trained_ET_model.pkl', 'wb') as f:
         pickle.dump(clf, f)
-
-ET()

@@ -7,16 +7,15 @@ import matplotlib.pyplot as plt
 # This function assumes that 'train' returns the loss at each epoch
 def plot(components, variance):
     """
-    This function generates a line plot of the variance in data over a specified number of components. 
-    The plot is saved as a PDF in the specified output directory.
+    This function generates a line plot of the variance in data accounted by number of components. 
+    The plot is saved as a png.
 
     Args:
-    - epochs (int): The total number of components to test PCA on.
-    - variance (list or np.array): A list or array containing the variance for each component.
-    - output_dir (str): The directory where the plot PDF should be saved.
+    - components (int): The total number of components to perform PCA on.
+    - variance (list): A list or containing the variance for each component.
 
     Returns:
-    Plot of the loss saved as PDFs in the output directory.
+    Plot of the variance saved as a png.
     """
     # Generate the plot
     plt.plot(range(components), variance)
@@ -31,11 +30,21 @@ def plot(components, variance):
     plt.text(0, 97.4, 'Paper variance', color='red', va='bottom')
 
     # Save the plot to a file
-    plt.savefig('pca_plots.png')
+    plt.savefig('dataProcessing/PCAStats/pca_plots.png')
     plt.close()
      
 def performPCA(path, outPath):
+    """
+    This function performs Principal Component Analysis (PCA) on a dataset and writes the lower dimensional data to a text file.
+    It also creates a plot of the variance in data accounted by number of components.
+    Additionally it creates a list of the top 5 features for each PCA component and saves it to an Excel file.
 
+    Args:
+    - path (str): The path to the text file containing the dataset. 
+    - outPath (str): The path where the output file will be saved.
+    Returns:
+    None. The function saves the PCA results to an output file.
+    """
     # Load the data from the text file into a 2D numpy array
     features = []
     labels = []
@@ -52,9 +61,9 @@ def performPCA(path, outPath):
     for array in arrays:
         # Remove leading and trailing brackets and split into columns
         columns = array.strip('[]').split()
-        #print(len(columns))
         # Convert the necessary columns to floats and add them to the features array
         features.append([float(x.strip("'")) for x in columns[7:]])
+        # Add the labels including GZ predictions to the labels array
         labels.append([x.strip("'") for x in columns[:7]])
 
     # Convert the features and labels list to a numpy array
@@ -95,14 +104,13 @@ def performPCA(path, outPath):
 
         # Print the total explained variance for the first 25 components
         pcaVariance.append(cumulative_explained_variance[-1]*100)
-    print(cumulative_explained_variance[-1]*100)
+
     # Plot the variance
     plot(25, pcaVariance)
 
-    #Creating PCA component list
-
-    # Open the file and read the lines
-    with open('features.txt', 'r') as f:
+    # Write the top 5 features for each PCA component to an Excel file
+    # Get the feature names from the features.txt file
+    with open('dataProcessing/features.txt', 'r') as f:
         next(f)  # Skip headers
         next(f)
         next(f)
@@ -115,10 +123,9 @@ def performPCA(path, outPath):
     components_df = components_df.apply(lambda row: pd.Series(row.nlargest(5).index), axis=1)
 
     # Create a new Excel writer object
-    with pd.ExcelWriter('pca_components.xlsx') as writer:
+    with pd.ExcelWriter('dataProcessing/PCAStats/pca_components.xlsx') as writer:
         # Write the DataFrame to the Excel file
         components_df.to_excel(writer, header=False)
-
 
     # Renormalize the PCA components
     scaler = MinMaxScaler()
