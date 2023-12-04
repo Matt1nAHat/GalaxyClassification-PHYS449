@@ -104,9 +104,9 @@ class NeuralNetwork(nn.Module):
 
 # Define hyperparameters
 input_size = 25
-hidden_size1 = 20
-hidden_size2 = 20
-hidden_size3 = 20
+hidden_size1 = 12
+hidden_size2 = 24
+hidden_size3 = 16
 output_size = 4  # Number of classes
 
 # Create the neural network, loss function, and optimizer
@@ -123,7 +123,7 @@ valid_dataset = TensorDataset(Valid_features_tensor, Valid_labels_tensor)
 valid_dataloader = DataLoader(valid_dataset, batch_size=32, shuffle=False)
 
 # Training loop
-num_epochs = 400
+num_epochs = 10
 train_losses = []  # To store the training losses for plotting
 valid_losses = []  # To store the validation losses for plotting
 kl_divergences = []  # To store KL divergences for plotting
