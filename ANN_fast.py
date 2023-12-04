@@ -20,16 +20,8 @@ def main():
     parser.add_argument('--wd', type=float, default=0.0001, help='Weight decay')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
 
-<<<<<<< HEAD
-# Import the three text files from the 'processedData' folder
-file1_path = os.path.join(data_folder, 'PCA_85K_test.txt')
-file2_path = os.path.join(data_folder, 'PCA_85K_train.txt')
-file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
-=======
     # Parse arguments
     args = parser.parse_args()
->>>>>>> 05f1819668bdd7055f37c17cf197931012a43481
-
 
     # Specify the path to the 'processedData' folder
     data_folder = os.path.join('dataProcessing', 'processedData')
@@ -141,48 +133,15 @@ file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
         epoch_train_loss = 0.0
         kl_divergence = 0.0
 
-<<<<<<< HEAD
-    for inputs, targets in train_dataloader:
-        optimizer.zero_grad()
-        outputs = model(inputs)
-        log_outputs = torch.log(outputs + 1e-10)  # Add a small epsilon to avoid log(0)
-
-        target_probs = torch.zeros_like(outputs)
-        target_probs.scatter_(1, targets.unsqueeze(1), 1.0)
-
-        kl_divergence += nn.KLDivLoss(reduction='batchmean')(log_outputs, target_probs)
-
-        loss = criterion(outputs, targets)
-        loss.backward()
-        optimizer.step()
-
-        epoch_train_loss += loss.item()
-
-    avg_train_loss = epoch_train_loss / len(train_dataloader)
-    avg_kl_divergence = kl_divergence / len(train_dataloader)
-
-    train_losses.append(avg_train_loss)
-    kl_divergences.append(avg_kl_divergence)
-
-    print(f'Training - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
-
-    # Validation phase
-    model.eval()
-    epoch_valid_loss = 0.0
-
-    with torch.no_grad():
-        for inputs, targets in valid_dataloader:
-=======
         for inputs, targets in train_dataloader:
             optimizer.zero_grad()
->>>>>>> 05f1819668bdd7055f37c17cf197931012a43481
             outputs = model(inputs)
             log_outputs = torch.log(outputs + 1e-10)  # Add a small epsilon to avoid log(0)
 
             target_probs = torch.zeros_like(outputs)
             target_probs.scatter_(1, targets.unsqueeze(1), 1.0)
 
-            kl_divergence += nn.KLDivLoss()(log_outputs, target_probs)
+            kl_divergence += nn.KLDivLoss(reduction='batchmean')(log_outputs, target_probs)
 
             loss = criterion(outputs, targets)
             loss.backward()
@@ -196,7 +155,26 @@ file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
         train_losses.append(avg_train_loss)
         kl_divergences.append(avg_kl_divergence)
 
-        print(f'Training - Epoch: [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
+        print(f'Training - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_train_loss:.4f}, KL Divergence: {avg_kl_divergence:.4f}')
+
+        # Validation phase
+        model.eval()
+        epoch_valid_loss = 0.0
+
+        with torch.no_grad():
+            for inputs, targets in valid_dataloader:
+                outputs = model(inputs)
+                loss = criterion(outputs, targets)
+                epoch_valid_loss += loss.item()
+
+        avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
+        valid_losses.append(avg_valid_loss)
+
+        avg_train_loss = epoch_train_loss / len(train_dataloader)
+        avg_kl_divergence = kl_divergence / len(train_dataloader)
+
+        train_losses.append(avg_train_loss)
+        kl_divergences.append(avg_kl_divergence)
 
         # Validation phase
         model.eval()
