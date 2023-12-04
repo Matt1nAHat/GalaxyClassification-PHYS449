@@ -73,11 +73,6 @@ def main():
 
     print('valid done')
 
-
-
-    print(isinstance(Test_labels, np.ndarray))
-    print(isinstance(Test_features, np.ndarray))
-
     # Assuming you have your features and labels as NumPy arrays
     # (Code for creating dummy data remains the same)
 
@@ -131,7 +126,7 @@ def main():
     valid_losses = []  # To store the validation losses for plotting
     kl_divergences = []  # To store KL divergences for plotting
 
-    print('on to training now')
+    print('Training...')
 
     for epoch in range(num_epochs):
         # Training phase
