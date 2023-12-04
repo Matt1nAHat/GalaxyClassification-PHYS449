@@ -166,22 +166,6 @@ def main():
         avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
         valid_losses.append(avg_valid_loss)
 
-        avg_train_loss = epoch_train_loss / len(train_dataloader)
-        avg_kl_divergence = kl_divergence / len(train_dataloader)
-
-        # Validation phase
-        model.eval()
-        epoch_valid_loss = 0.0
-
-        with torch.no_grad():
-            for inputs, targets in valid_dataloader:
-                outputs = model(inputs)
-                loss = criterion(outputs, targets)
-                epoch_valid_loss += loss.item()
-
-        avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
-        valid_losses.append(avg_valid_loss)
-
         print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
 
     # Plot the losses and KL divergence for both training and validation
