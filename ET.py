@@ -7,8 +7,8 @@ from mpl_toolkits.mplot3d import Axes3D
 def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt', 
     testPath = './dataProcessing/processedData/testPCAList.txt',
     validPath = './dataProcessing/processedData/validPCAList.txt',
-    depthRange = [10],
-    numOfTreesRange = [40],
+    depthRange = range(5, 15, 2),
+    numOfTreesRange = range(10, 150, 10),
     verbose = False):
     # Step 1: Load data
     def txtToList(filePath):
@@ -37,9 +37,10 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     # validPath = './dataProcessing/processedData/PCA_50k_valid.txt'
     validFeatures, validLabels = txtToList(validPath)
 
-    depthRange = range(5, 15, 2)
-    numOfTreesRange = range(10, 150, 10)
+    # depthRange = [10] # To have a fixed depth
+    # numOfTreesRange = [50] # To have a fixed number of trees
     validationResults = []
+    maxAccuracy = 0
 
     for depth in depthRange:
         validationRow = []
@@ -82,6 +83,13 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
             # Evaluate the model using the validation data
             validAccuracy = clf.score(validFeatures, validLabels)
             validationRow.append(round(validAccuracy, 5))
+            
+            # Save the best model
+            if validAccuracy > maxAccuracy:
+                maxAccuracy = validAccuracy
+                bestDepth = depth
+                bestNumOfTrees = num_of_trees
+                bestModel = clf
 
             ResultsString = f"""Training   (70% of Data) Accuracy: {trainAccuracy}
             Testing    (10% of Data) Accuracy: {testAccuracy}
@@ -113,6 +121,7 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     ax.set_ylabel('Depth')
     ax.set_xlabel('Number of Trees')
     ax.set_zlabel('Validation Results')
+    ax.set_title(f'Highest accuracy: {maxAccuracy}, at depth {bestDepth} and {bestNumOfTrees} trees')
 
     # Show the plot
     plt.show()
@@ -126,4 +135,3 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     with open('./ET_Results/trained_ET_model.pkl', 'wb') as f:
         pickle.dump(clf, f)
 
-ET()
