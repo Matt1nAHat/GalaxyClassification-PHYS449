@@ -3,12 +3,10 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-import argparse
-
-
 
 # Specify the path to the 'processedData' folder
 data_folder = os.path.join('dataProcessing', 'processedData')
@@ -20,59 +18,44 @@ file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
 
 label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
 
-with open(file1_path, 'r') as test:
-    # Process file1 contents
-    lines = test.readlines()
-    first_elements = []
-    other_elements = []
-    for line in lines:
-        elements = line.split()
-        first_element = elements[0]
-        other_element = elements[1:]
-        first_elements.append(first_element)
-        Test_labels = np.array([label_mapping[label] for label in first_elements])
-        Test_labels_tensor = torch.tensor(Test_labels, dtype=torch.long)
-        other_elements.append(other_element)
-        Test_features = other_elements
-        Test_features = [[float(value) for value in sublist] for sublist in Test_features]
-        Test_features_tensor = torch.tensor(Test_features).float()
-    print('test done')
+# Process Test file
+# Read the file into a pandas DataFrame
+df = pd.read_csv(file1_path, delim_whitespace=True, header=None)
 
-with open(file2_path, 'r') as train:
-    # Process file2 contents
-    lines = train.readlines()
-    first_elements = []
-    other_elements = []
-    for line in lines:
-        elements = line.split()
-        first_element = elements[0]
-        other_element = elements[1:]
-        first_elements.append(first_element)
-        Train_labels = np.array([label_mapping[label] for label in first_elements])
-        Train_labels_tensor = torch.tensor(Train_labels, dtype=torch.long)
-        other_elements.append(other_element)
-        Train_features = other_elements
-        Train_features = [[float(value) for value in sublist] for sublist in Train_features]
-        Train_features_tensor = torch.tensor(Train_features).float()
-    print('train done')
+# Process the DataFrame
+Test_labels = df[0].map(label_mapping).values
+Test_labels_tensor = torch.tensor(Test_labels, dtype=torch.long)
 
-with open(file3_path, 'r') as validation:
-    # Process file3 contents
-    lines = validation.readlines()
-    first_elements = []
-    other_elements = []
-    for line in lines:
-        elements = line.split()
-        first_element = elements[0]
-        other_element = elements[1:]
-        first_elements.append(first_element)
-        Valid_labels = np.array([label_mapping[label] for label in first_elements])
-        Valid_labels_tensor = torch.tensor(Valid_labels, dtype=torch.long)
-        other_elements.append(other_element)
-        Valid_features = other_elements
-        Valid_features = [[float(value) for value in sublist] for sublist in Valid_features]
-        Valid_features_tensor = torch.tensor(Valid_features).float()    
-    print('valid done')
+Test_features = df.drop(0, axis=1).values.astype(float)
+Test_features_tensor = torch.tensor(Test_features).float()
+
+print('test done')
+
+# Process Training file
+# Read the file into a pandas DataFrame
+df = pd.read_csv(file2_path, delim_whitespace=True, header=None)
+
+# Process the DataFrame
+Train_labels = df[0].map(label_mapping).values
+Train_labels_tensor = torch.tensor(Train_labels, dtype=torch.long)
+
+Train_features = df.drop(0, axis=1).values.astype(float)
+Train_features_tensor = torch.tensor(Train_features).float()
+
+print('train done')
+
+# Process Validation file
+# Read the file into a pandas DataFrame
+df = pd.read_csv(file3_path, delim_whitespace=True, header=None)
+
+# Process the DataFrame
+Valid_labels = df[0].map(label_mapping).values
+Valid_labels_tensor = torch.tensor(Valid_labels, dtype=torch.long)
+
+Valid_features = df.drop(0, axis=1).values.astype(float)
+Valid_features_tensor = torch.tensor(Valid_features).float()
+
+print('valid done')
 
 
 
@@ -237,5 +220,5 @@ print(f"Merger - Precision: {precision[1]:.2f}, Recall: {recall[1]:.2f}, F-score
 print(f"Spiral - Precision: {precision[2]:.2f}, Recall: {recall[2]:.2f}, F-score: {f_score[2]:.2f}")
 print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
 
-print(f"Predicted classes: {predicted_classes_name}")
+# print(f"Predicted classes: {predicted_classes_name}")
 
