@@ -210,7 +210,7 @@ def main():
     confusion_mat = confusion_matrix(Test_labels, predicted_labels_array)
 
     # Calculate precision, recall, and F-score for each class
-    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=1)
+    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=0.01)
     recall = recall_score(Test_labels, predicted_labels_array, average=None)
     f_score = f1_score(Test_labels, predicted_labels_array, average=None)
 

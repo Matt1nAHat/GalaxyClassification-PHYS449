@@ -67,8 +67,6 @@ def main():
     Valid_features = df.drop(0, axis=1).values.astype(float)
     Valid_features_tensor = torch.tensor(Valid_features).float()
 
-    print('Data processing done')
-
     # Assuming you have your features and labels as NumPy arrays
     # (Code for creating dummy data remains the same)
 
@@ -111,9 +109,11 @@ def main():
     best_params = None  
 
     # Loop over the grid
-    for params in grid:
+    for i, params in enumerate(grid):
+        print(f'Running configuration {i+1} of {len(grid)}: {params}')
+
         # Update the args with the current parameters
-        hidden_size1 = params['hidden_size_1']
+        hidden_size1 = params['hidden_size_1'] # test 5 nodes with 3 layers or 50-100 nodes for 1 layer
         hidden_size2 = params['hidden_size_2']
         hidden_size3 = params['hidden_size_3']
         args.lr = params['lr']
@@ -138,8 +138,6 @@ def main():
 
         # Training loop
         num_epochs = args.epochs
-
-        print('Training...')
 
         for epoch in range(num_epochs):
             # Training phase
