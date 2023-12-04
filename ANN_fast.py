@@ -44,8 +44,6 @@ def main():
     Test_features = df.drop(0, axis=1).values.astype(float)
     Test_features_tensor = torch.tensor(Test_features).float()
 
-    print('test done')
-
     # Process Training file
     # Read the file into a pandas DataFrame
     df = pd.read_csv(file2_path, delim_whitespace=True, header=None)
@@ -56,8 +54,6 @@ def main():
 
     Train_features = df.drop(0, axis=1).values.astype(float)
     Train_features_tensor = torch.tensor(Train_features).float()
-
-    print('train done')
 
     # Process Validation file
     # Read the file into a pandas DataFrame
@@ -70,7 +66,7 @@ def main():
     Valid_features = df.drop(0, axis=1).values.astype(float)
     Valid_features_tensor = torch.tensor(Valid_features).float()
 
-    print('valid done')
+    print('Data processing done')
 
     # Assuming you have your features and labels as NumPy arrays
     # (Code for creating dummy data remains the same)
@@ -170,29 +166,10 @@ def main():
         avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
         valid_losses.append(avg_valid_loss)
 
-        avg_train_loss = epoch_train_loss / len(train_dataloader)
-        avg_kl_divergence = kl_divergence / len(train_dataloader)
-
-        train_losses.append(avg_train_loss)
-        kl_divergences.append(avg_kl_divergence)
-
-        # Validation phase
-        model.eval()
-        epoch_valid_loss = 0.0
-
-        with torch.no_grad():
-            for inputs, targets in valid_dataloader:
-                outputs = model(inputs)
-                loss = criterion(outputs, targets)
-                epoch_valid_loss += loss.item()
-
-        avg_valid_loss = epoch_valid_loss / len(valid_dataloader)
-        valid_losses.append(avg_valid_loss)
-
         print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
 
     # Plot the losses and KL divergence for both training and validation
-    plt.figure(figsize=(18, 6))
+    plt.figure(figsize=(10, 6))
 
     plt.subplot(1, 3, 1)
     plt.plot(train_losses, label='Training Loss')
@@ -210,6 +187,7 @@ def main():
     plt.ylabel('KL Divergence')
     plt.legend()
 
+    plt.savefig(f'ANN_Results\loss_wd{args.wd}_lr{args.lr}_HS{args.hidden_size_1}-{args.hidden_size_2}-{args.hidden_size_3}.png')
     plt.show()
 
     # Test the model
@@ -223,8 +201,6 @@ def main():
         # Compare predicted labels to test labels
         correct_predictions = (predicted_labels_array == Test_labels)
         accuracy = (correct_predictions.sum() / len(Test_labels)) * 100
-
-        print(f"Percentage of correctness: {accuracy:.2f}%")
 
     # Map predicted labels back to original labels
     reverse_mapping = {v: k for k, v in label_mapping.items()}
@@ -248,8 +224,7 @@ def main():
     print(f"Merger - Precision: {precision[1]:.2f}, Recall: {recall[1]:.2f}, F-score: {f_score[1]:.2f}")
     print(f"Spiral - Precision: {precision[2]:.2f}, Recall: {recall[2]:.2f}, F-score: {f_score[2]:.2f}")
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
-
-    # print(f"Predicted classes: {predicted_classes_name}")
+    print(f"Percentage of correctness: {accuracy:.2f}%")
 
 if __name__ == '__main__':
     main()
