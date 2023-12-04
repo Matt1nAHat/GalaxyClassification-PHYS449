@@ -8,8 +8,11 @@
 - Aaron Herschberger - 20778142
 
 # Run instructions
-To run on an existing input file of feature vectors:
-### main.py --input-file [file_path]
+To train Extra Trees on existing post-PCA files with default hyperparameters:
+### main.py --ET=True
+
+To train the ANN on existing post-PCA files with default hyperparameters:
+### main.py --ANN=True
 
 To create feature vectors from images:
 ### featureVector < [input_folder] > PCA.py -o inputs.txt
