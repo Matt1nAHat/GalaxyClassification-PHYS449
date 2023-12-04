@@ -13,7 +13,7 @@ data_folder = os.path.join('dataProcessing', 'processedData')
 
 # Import the three text files from the 'processedData' folder
 file1_path = os.path.join(data_folder, 'PCA_85K_test.txt')
-file2_path = os.path.join(data_folder, 'PCA_85k_train.txt')
+file2_path = os.path.join(data_folder, 'PCA_85K_train.txt')
 file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
 
 label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
@@ -56,8 +56,6 @@ Valid_features = df.drop(0, axis=1).values.astype(float)
 Valid_features_tensor = torch.tensor(Valid_features).float()
 
 print('valid done')
-
-
 
 print(isinstance(Test_labels, np.ndarray))
 print(isinstance(Test_features, np.ndarray))
@@ -131,7 +129,7 @@ for epoch in range(num_epochs):
         target_probs = torch.zeros_like(outputs)
         target_probs.scatter_(1, targets.unsqueeze(1), 1.0)
 
-        kl_divergence += nn.KLDivLoss()(log_outputs, target_probs)
+        kl_divergence += nn.KLDivLoss(reduction='batchmean')(log_outputs, target_probs)
 
         loss = criterion(outputs, targets)
         loss.backward()
