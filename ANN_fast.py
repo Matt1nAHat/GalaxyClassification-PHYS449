@@ -80,16 +80,6 @@ file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
 
     print('valid done')
 
-<<<<<<< HEAD
-print(isinstance(Test_labels, np.ndarray))
-print(isinstance(Test_features, np.ndarray))
-=======
-
-
-    print(isinstance(Test_labels, np.ndarray))
-    print(isinstance(Test_features, np.ndarray))
->>>>>>> 05f1819668bdd7055f37c17cf197931012a43481
-
     # Assuming you have your features and labels as NumPy arrays
     # (Code for creating dummy data remains the same)
 
@@ -143,7 +133,7 @@ print(isinstance(Test_features, np.ndarray))
     valid_losses = []  # To store the validation losses for plotting
     kl_divergences = []  # To store KL divergences for plotting
 
-    print('on to training now')
+    print('Training...')
 
     for epoch in range(num_epochs):
         # Training phase
