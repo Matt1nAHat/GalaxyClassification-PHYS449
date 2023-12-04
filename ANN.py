@@ -6,14 +6,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
+import argparse
+
+
 
 # Specify the path to the 'processedData' folder
 data_folder = os.path.join('dataProcessing', 'processedData')
 
 # Import the three text files from the 'processedData' folder
-file1_path = os.path.join(data_folder, 'testPCAList.txt')
-file2_path = os.path.join(data_folder, 'trainPCAList.txt')
-file3_path = os.path.join(data_folder, 'validPCAList.txt')
+file1_path = os.path.join(data_folder, 'PCA_85K_test.txt')
+file2_path = os.path.join(data_folder, 'PCA_85k_train.txt')
+file3_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
 
 label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
 
@@ -33,7 +36,7 @@ with open(file1_path, 'r') as test:
         Test_features = other_elements
         Test_features = [[float(value) for value in sublist] for sublist in Test_features]
         Test_features_tensor = torch.tensor(Test_features).float()
-        print('test done')
+    print('test done')
 
 with open(file2_path, 'r') as train:
     # Process file2 contents
@@ -51,7 +54,7 @@ with open(file2_path, 'r') as train:
         Train_features = other_elements
         Train_features = [[float(value) for value in sublist] for sublist in Train_features]
         Train_features_tensor = torch.tensor(Train_features).float()
-        print('train done')
+    print('train done')
 
 with open(file3_path, 'r') as validation:
     # Process file3 contents
@@ -69,7 +72,7 @@ with open(file3_path, 'r') as validation:
         Valid_features = other_elements
         Valid_features = [[float(value) for value in sublist] for sublist in Valid_features]
         Valid_features_tensor = torch.tensor(Valid_features).float()    
-        print('valid done')
+    print('valid done')
 
 
 
