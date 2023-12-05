@@ -56,6 +56,12 @@ python main.py -PROCESS --OBJ_LIST "test.csv"
 Where OBJ_LIST is the file of objects you want to process
 Additional parameters include the feature vector and PCA list file names which default to "featuresList.txt" and "PCAList.txt" respectively.
 
+*NOTE*
+When specifying file paths be sure to follow the following:
+- For training/validation/testing parameters the file name input must match the file in the dataProcessing/processedData folder
+- For --OBJ_LIST the file name input must match the file in the dataAcquisition/Split_data_IDs folder
+- For --FEATURE_OUT the file name input must match the file in the dataProcessing/featureVectors folder
+- For --PCA_OUT the file name input must match the file in the dataProcessing/processedData folder
 
 ## Dependancies
 ### This project utilizes the following libraries:
