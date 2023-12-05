@@ -13,7 +13,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Provide hyperparameters & dataset filepaths.")
 
     # Add the arguments. First 3 are whether to run PROCESS, ET, or ANN. The rest are hyperparameters and/or dataset filepaths.
-    parser.add_argument('--PROCESS', default=False, type=bool, help='Run data preprocessing on object list to obtain input data for ML models') # PROCESS
+    parser.add_argument('-PROCESS', default=False, type=bool, help='Run data preprocessing on object list to obtain input data for ML models') # PROCESS
     parser.add_argument('-ET', default=False, action='store_true', help='Run the ET model; specify hyperparameters and/or datasets or neither for default values.') # ET
     parser.add_argument('-ANN', default=False, action='store_true', help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
 
