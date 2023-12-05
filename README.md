@@ -53,8 +53,6 @@ To preprocess a list of objects to use for the models (fetch the features and pe
 ```sh
 python main.py -PROCESS --OBJ_LIST "test.csv" 
 ```
-Where OBJ_LIST is the file of objects you want to process
-Additional parameters include the feature vector and PCA list file names which default to "featuresList.txt" and "PCAList.txt" respectively.
 
 *NOTE*
 When specifying file paths be sure to follow the following:
