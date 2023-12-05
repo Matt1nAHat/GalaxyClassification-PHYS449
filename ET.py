@@ -3,6 +3,7 @@ from sklearn.ensemble import ExtraTreesClassifier
 import pickle
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt', 
     testPath = './dataProcessing/processedData/testPCAList.txt',
@@ -125,11 +126,30 @@ def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt',
 
     # Show the plot
     plt.show()
+    
+    # Get the predicted labels for the validation set
+    validPredictions = bestModel.predict(validFeatures)
 
+    # Calculate the confusion matrix
+    galaxyLabels = ['Elliptical', 'Spiral', 'Star', 'Merger']
+    confMatrix = confusion_matrix(validLabels, validPredictions, labels=galaxyLabels)
+    print('Confusion Matrix:\n', confMatrix)
+
+    # Calculate precision and recall
+    precision = precision_score(validLabels, validPredictions, average='macro', zero_division=np.nan)
+    recall = recall_score(validLabels, validPredictions, average='macro')
+    F_score = 2 * (precision * recall) / (precision + recall)
+    print('Precision:', round(precision, 5))
+    print('Recall:', round(recall, 5))
+    print('F_score:', round(F_score, 5))
 
     # Write All accuracies to a file, ET_accuracies.txt
     with open('./ET_Results/ET_accuracies.txt', 'w') as f:
         f.write(ResultsString)
+    # Write confusion matrix to a file, ET_confusion_matrix.txt
+    with open('./ET_Results/ET_confusion_matrix.txt', 'w') as f:
+        f.write(label for label in galaxyLabels)
+        f.write(str(confMatrix))
 
     # Step 6: Save model as pickel file for future use
     with open('./ET_Results/trained_ET_model.pkl', 'wb') as f:

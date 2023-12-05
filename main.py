@@ -18,8 +18,8 @@ if __name__ == "__main__":
     parser.add_argument('-ANN', default=False, action='store_true', help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
 
     # ET arguments
-    parser.add_argument('--DEPTH', type=str, help='The max depth; can be an int or a list of ints')
-    parser.add_argument('--NUM_OF_TREES', type=int, help='The number of trees in the forest')
+    parser.add_argument('--DEPTH', type=str, default=10, help='The max depth; can be an int or a list of ints')
+    parser.add_argument('--NUM_OF_TREES', type=int, default=50, help='The number of trees in the forest')
 
     # ANN arguments
     parser.add_argument('--EPOCHS', type=int, default=25, help='Number of epochs for training')
