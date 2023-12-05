@@ -3,6 +3,7 @@ from sklearn.ensemble import ExtraTreesClassifier
 import pickle
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt', 
     testPath = './dataProcessing/processedData/testPCAList.txt',
@@ -125,13 +126,29 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
 
     # Show the plot
     plt.show()
+    
+    # Step 6: Create confusion matrix for best model
+
+    # Get the predicted labels for the validation set
+    validPredictions = bestModel.predict(validFeatures)
+
+    # Calculate the confusion matrix
+    confMatrix = confusion_matrix(validLabels, validPredictions)
+    print('Confusion Matrix:\n', confMatrix)
+
+    # Calculate precision and recall
+    precision = precision_score(validLabels, validPredictions, average='macro')
+    recall = recall_score(validLabels, validPredictions, average='macro')
+    print('Precision:', round(precision, 5))
+    print('Recall:', round(recall, 5))
 
 
     # Write All accuracies to a file, ET_accuracies.txt
     with open('./ET_Results/ET_accuracies.txt', 'w') as f:
         f.write(ResultsString)
 
-    # Step 6: Save model as pickel file for future use
+    # Step 7: Save best model as pickel file for future use
     with open('./ET_Results/trained_ET_model.pkl', 'wb') as f:
-        pickle.dump(clf, f)
+        pickle.dump(bestModel, f)
 
+ET()
