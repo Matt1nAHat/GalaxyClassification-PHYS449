@@ -32,6 +32,9 @@ if __name__ == "__main__":
     parser.add_argument('--WD', type=float, default=0.0001, help='Weight decay')
     parser.add_argument('--BATCH_SIZE', type=int, default=32, help='Batch size for training')
     parser.add_argument('-v', type=bool, default=False, help='Print out loss plots')
+    parser.add_argument('--test_path', type=str, default='PCA_85K_test.txt', help='Name of dataset txt file for testing')
+    parser.add_argument('--train_path', type=str, default='PCA_85K_train.txt', help='Name of dataset txt file for training')
+    parser.add_argument('--valid_path', type=str, default='PCA_85K_valid.txt', help='Name of dataset txt file for validation')
 
     # Preprocess arguments
     parser.add_argument("--OBJ_LIST", default="test.csv", help="path to the object list you want to process (csv file) - MUST BE IN DATAACQUISITION/SPLIT_DATA_IDS/")
@@ -80,8 +83,11 @@ if __name__ == "__main__":
         WD = args.WD
         BATCH_SIZE = args.BATCH_SIZE
         VERBOSE = args.v
+        test_path = args.test_path
+        train_path = args.train_path
+        valid_path = args.valid_path
 
-        ANN(EPOCHS, HS1, HS2, HS3, LR, WD, BATCH_SIZE, VERBOSE)     
+        ANN(EPOCHS, HS1, HS2, HS3, LR, WD, BATCH_SIZE, VERBOSE, test_path, train_path, valid_path)     
 
 
     # If PROCESS is chosen:
