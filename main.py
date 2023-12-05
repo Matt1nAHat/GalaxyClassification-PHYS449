@@ -32,9 +32,9 @@ if __name__ == "__main__":
     parser.add_argument('-V', action='store_true', default=False, help='Print out loss plots')
 
     # Input file paths
-    parser.add_argument('--TEST_PATH', type=str, default='PCA_85K_test.txt', help='Path to testing dataset txt')
-    parser.add_argument('--TRAIN_PATH', type=str, default='PCA_85K_train.txt', help='Path to training dataset txt')
-    parser.add_argument('--VALID_PATH', type=str, default='PCA_85K_valid.txt', help='Path to validation dataset txt')
+    parser.add_argument('--TEST_PATH', type=str, default='dataProcessing\processedData\PCA_85k_test.txt', help='Path to testing dataset txt')
+    parser.add_argument('--TRAIN_PATH', type=str, default='dataProcessing\processedData\PCA_85k_train.txt', help='Path to training dataset txt')
+    parser.add_argument('--VALID_PATH', type=str, default='dataProcessing\processedData\PCA_85k_valid.txt', help='Path to validation dataset txt')
 
     # Preprocess arguments
     parser.add_argument("--OBJ_LIST", default="test.csv", help="path to the object list you want to process (csv file) - MUST BE IN DATAACQUISITION/SPLIT_DATA_IDS/")
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         TRAIN_PATH = args.TRAIN_PATH
         TEST_PATH = args.TEST_PATH
         VALID_PATH = args.VALID_PATH
-        VERBOSE = args.VERBOSE
+        VERBOSE = args.V
 
         # Now parse the DEPTH argument
         try:
