@@ -26,8 +26,8 @@ if __name__ == "__main__":
     parser.add_argument('--HS1', type=int, default=10, help='Number of neurons in the first hidden layer')
     parser.add_argument('--HS2', type=int, default=25, help='Number of neurons in the second hidden layer')
     parser.add_argument('--HS3', type=int, default=25, help='Number of neurons in the third hidden layer')
-    parser.add_argument('--LR', type=float, default=0.0001, help='Learning rate')
-    parser.add_argument('--WD', type=float, default=0.0001, help='Weight decay')
+    parser.add_argument('--LR', type=float, default=0.0003, help='Learning rate')
+    parser.add_argument('--WD', type=float, default=0.0002, help='Weight decay')
     parser.add_argument('--BATCH_SIZE', type=int, default=25, help='Batch size for training')
     parser.add_argument('-V', action='store_true', default=False, help='Print out loss plots')
 
