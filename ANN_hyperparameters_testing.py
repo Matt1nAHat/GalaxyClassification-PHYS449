@@ -10,16 +10,16 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_
 import argparse
 from sklearn.model_selection import ParameterGrid
 
-def main():
+def param_testing():
     # Create parser
     parser = argparse.ArgumentParser(description='ANN for Galaxy Morphology Classification')
-    parser.add_argument('--epochs', type=int, default=15, help='Number of epochs for training')
+    parser.add_argument('--epochs', type=int, default=25, help='Number of epochs for training')
     parser.add_argument('--hidden_size_1', type=int, default=12, help='Number of neurons in the first hidden layer')
     parser.add_argument('--hidden_size_2', type=int, default=24, help='Number of neurons in the second hidden layer')
-    parser.add_argument('--hidden_size_3', type=int, default=16, help='Number of neurons in the third hidden layer')
-    parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--wd', type=float, default=0.0001, help='Weight decay')
-    parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
+    parser.add_argument('--hidden_size_3', type=int, default=12, help='Number of neurons in the third hidden layer')
+    parser.add_argument('--lr', type=float, default=0.0004, help='Learning rate')
+    parser.add_argument('--wd', type=float, default=0.0003, help='Weight decay')
+    parser.add_argument('--batch_size', type=int, default=30, help='Batch size for training')
 
     # Parse arguments
     args = parser.parse_args()
@@ -189,4 +189,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    param_testing()
