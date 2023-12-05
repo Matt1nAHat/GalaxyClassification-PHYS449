@@ -7,7 +7,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-import argparse
 
 def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 

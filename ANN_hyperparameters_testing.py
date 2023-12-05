@@ -13,7 +13,7 @@ from sklearn.model_selection import ParameterGrid
 def main():
     # Create parser
     parser = argparse.ArgumentParser(description='ANN for Galaxy Morphology Classification')
-    parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
+    parser.add_argument('--epochs', type=int, default=15, help='Number of epochs for training')
     parser.add_argument('--hidden_size_1', type=int, default=12, help='Number of neurons in the first hidden layer')
     parser.add_argument('--hidden_size_2', type=int, default=24, help='Number of neurons in the second hidden layer')
     parser.add_argument('--hidden_size_3', type=int, default=16, help='Number of neurons in the third hidden layer')
@@ -96,12 +96,12 @@ def main():
 
     # Define hyperparameters
     param_grid = {
-        # 'hidden_size_1': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
-        # 'hidden_size_2': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
-        # 'hidden_size_3': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
-        'lr': [0.0001, 0.0003, 0.0005, 0.00005],
-        'wd': [0.0001, 0.0003],
-        'batch_size': [32, 64]
+        'hidden_size_1': [12],
+        'hidden_size_2': [24],
+        'hidden_size_3': [16],
+        'lr': [0.0004, 0.0006],
+        'wd': [0.0003, 0.0004],
+        'batch_size': [25, 30]
     }
 
     grid = ParameterGrid(param_grid)
@@ -113,9 +113,9 @@ def main():
         print(f'Running configuration {i+1} of {len(grid)}: {params}')
 
         # Update the args with the current parameters
-        # hidden_size1 = params['hidden_size_1']
-        # hidden_size2 = params['hidden_size_2']
-        # hidden_size3 = params['hidden_size_3']
+        hidden_size1 = params['hidden_size_1']
+        hidden_size2 = params['hidden_size_2']
+        hidden_size3 = params['hidden_size_3']
         args.lr = params['lr']
         args.wd = params['wd']
         args.batch_size = params['batch_size']
@@ -124,7 +124,7 @@ def main():
     
 
         # Create the neural network, loss function, and optimizer
-        model = NeuralNetwork(input_size, 24, 24, 12, output_size)
+        model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)
 
