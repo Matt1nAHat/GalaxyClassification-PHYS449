@@ -34,9 +34,9 @@ if __name__ == "__main__":
     parser.add_argument('-v', type=bool, default=False, help='Print out loss plots')
 
     # Preprocess arguments
-    parser.add_argument("--OBJ_LIST", default="dataAcquisition/Split_data_IDs/test.csv", help="path to the object list you want to process")
-    parser.add_argument("--FEATURE_OUT", default="dataProcessing/featureVectors/featuresList.txt", help="path to save the feature vectors")
-    parser.add_argument("--PCA_OUT", default="dataProcessing/processedData/PCAList.txt", help="path to save the final PCA data with labels")
+    parser.add_argument("--OBJ_LIST", default="test.csv", help="path to the object list you want to process (csv file) - MUST BE IN DATAACQUISITION/SPLIT_DATA_IDS/")
+    parser.add_argument("--FEATURE_OUT", default="featuresList.txt", help="path to save the feature vectors (txt file) - MUST BE IN DATAPROCESSING/FEATUREVECTORS/")
+    parser.add_argument("--PCA_OUT", default="PCAList.txt", help="path to save the final PCA data with labels (txt file) - MUST BE IN DATAPROCESSING/PROCESSEDDATA/")
     
     
     # Execute the parse_args() method, obtain whether to run ET or ANN
@@ -86,6 +86,6 @@ if __name__ == "__main__":
 
     # If PROCESS is chosen:
     if run_PROCESS:
-        # Run the preprocessing
-        saveFeatureVectors(args.OBJ_LIST, args.FEATURE_OUT)
-        performPCA(args.FEATURE_OUT, args.PCA_OUT)
+        # Run the preprocessing of given files
+        saveFeatureVectors(f"dataAcquisition/Split_data_IDs/{args.OBJ_LIST}", f"dataProcessing/featureVectors/{args.FEATURE_OUT}")
+        performPCA(f"dataProcessing/featureVectors/{args.FEATURE_OUT}", f"dataProcessing/processedData/{args.PCA_OUT}")
