@@ -1,3 +1,4 @@
+#Importing the necessary libraries
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -10,6 +11,107 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_
 import argparse
 
 def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
+    """
+    Train and evaluate an Artificial Neural Network (ANN) model for galaxy classification.
+
+    Args:
+        epochs (int): Number of training epochs.
+        hidden_1 (int): Number of units in the first hidden layer.
+        hidden_2 (int): Number of units in the second hidden layer.
+        hidden_3 (int): Number of units in the third hidden layer.
+        lr (float): Learning rate for the optimizer.
+        wd (float): Weight decay for the optimizer.
+        batch_size (int): Batch size for training.
+        verbose (bool): Whether to print training and validation progress.
+
+    Returns:
+        None
+    """
+    class NeuralNetwork(nn.Module):
+        """
+        Custom neural network class for galaxy classification.
+
+        Args:
+            input_size (int): Number of input features.
+            hidden_size1 (int): Number of units in the first hidden layer.
+            hidden_size2 (int): Number of units in the second hidden layer.
+            hidden_size3 (int): Number of units in the third hidden layer.
+            output_size (int): Number of output classes.
+
+        Attributes:
+            fc1 (nn.Linear): First fully connected layer.
+            relu1 (nn.ReLU): ReLU activation function.
+            fc2 (nn.Linear): Second fully connected layer.
+            relu2 (nn.ReLU): ReLU activation function.
+            fc3 (nn.Linear): Third fully connected layer.
+            relu3 (nn.ReLU): ReLU activation function.
+            fc4 (nn.Linear): Fourth fully connected layer.
+            softmax (nn.Softmax): Softmax activation function.
+
+        Methods:
+            forward: Forward pass through the network.
+
+        """
+
+        def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+            """
+            Initialize the NeuralNetwork class.
+
+            Args:
+                input_size (int): The size of the input layer.
+                hidden_size1 (int): The size of the first hidden layer.
+                hidden_size2 (int): The size of the second hidden layer.
+                hidden_size3 (int): The size of the third hidden layer.
+                output_size (int): The size of the output layer.
+            """
+            super(NeuralNetwork, self).__init__()
+            self.fc1 = nn.Linear(input_size, hidden_size1).float()
+            self.relu1 = nn.ReLU()
+            self.fc2 = nn.Linear(hidden_size1, hidden_size2).float()
+            self.relu2 = nn.ReLU()
+            self.fc3 = nn.Linear(hidden_size2, hidden_size3).float()
+            self.relu3 = nn.ReLU()
+            self.fc4 = nn.Linear(hidden_size3, output_size).float()
+            self.softmax = nn.Softmax(dim=-1)
+
+        def forward(self, x):
+            """
+            Performs the forward pass of the neural network.
+
+            Args:
+                x (torch.Tensor): Input tensor.
+
+            Returns:
+                torch.Tensor: Output tensor after passing through the network.
+            """
+            x = self.fc1(x)
+            x = self.relu1(x)
+            x = self.fc2(x)
+            x = self.relu2(x)
+            x = self.fc3(x)
+            x = self.relu3(x)
+            x = self.fc4(x)
+            x = self.softmax(x)
+            return x
+
+
+def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
+    """
+    Trains and evaluates an Artificial Neural Network (ANN) model for galaxy classification.
+
+    Args:
+        epochs (int): The number of training epochs.
+        hidden_1 (int): The number of units in the first hidden layer.
+        hidden_2 (int): The number of units in the second hidden layer.
+        hidden_3 (int): The number of units in the third hidden layer.
+        lr (float): The learning rate for the optimizer.
+        wd (float): The weight decay for the optimizer.
+        batch_size (int): The batch size for training.
+        verbose (bool): Whether to print training and validation information.
+
+    Returns:
+        None
+    """
 
     # Specify the path to the 'processedData' folder
     data_folder = os.path.join('dataProcessing', 'processedData')
@@ -61,6 +163,17 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
     # Create a custom neural network class
     class NeuralNetwork(nn.Module):
+        """
+        A neural network model for galaxy classification.
+
+        Args:
+            input_size (int): The size of the input layer.
+            hidden_size1 (int): The size of the first hidden layer.
+            hidden_size2 (int): The size of the second hidden layer.
+            hidden_size3 (int): The size of the third hidden layer.
+            output_size (int): The size of the output layer.
+        """
+
         def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
             super(NeuralNetwork, self).__init__()
             self.fc1 = nn.Linear(input_size, hidden_size1).float()
@@ -73,6 +186,15 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
             self.softmax = nn.Softmax(dim=-1)
 
         def forward(self, x):
+            """
+            Forward pass of the neural network.
+
+            Args:
+                x (torch.Tensor): The input tensor.
+
+            Returns:
+                torch.Tensor: The output tensor.
+            """
             x = self.fc1(x)
             x = self.relu1(x)
             x = self.fc2(x)
@@ -111,6 +233,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
     print('Training...')
 
+    #Training model for the number of epochs specified
     for epoch in range(num_epochs):
         # Training phase
         model.train()
@@ -133,6 +256,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
             epoch_train_loss += loss.item()
 
+        #Defining training loss and kl divergence
         avg_train_loss = epoch_train_loss / len(train_dataloader)
         avg_kl_divergence = kl_divergence / len(train_dataloader)
 
@@ -158,6 +282,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
         if verbose:
             print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
 
+    #Plotting the training and validation losses
     if verbose:
         # Plot the losses and KL divergence for both training and validation
         plt.figure(figsize=(10, 6))
@@ -217,5 +342,6 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
     print(f"Percentage of correctness: {accuracy:.2f}%")
 
+#Defining the arguments for the ANN
 if __name__ == '__main__':
     ANN()
