@@ -10,92 +10,7 @@ import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 import argparse
 
-def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
-    """
-    Train and evaluate an Artificial Neural Network (ANN) model for galaxy classification.
-
-    Args:
-        epochs (int): Number of training epochs.
-        hidden_1 (int): Number of units in the first hidden layer.
-        hidden_2 (int): Number of units in the second hidden layer.
-        hidden_3 (int): Number of units in the third hidden layer.
-        lr (float): Learning rate for the optimizer.
-        wd (float): Weight decay for the optimizer.
-        batch_size (int): Batch size for training.
-        verbose (bool): Whether to print training and validation progress.
-
-    Returns:
-        None
-    """
-    class NeuralNetwork(nn.Module):
-        """
-        Custom neural network class for galaxy classification.
-
-        Args:
-            input_size (int): Number of input features.
-            hidden_size1 (int): Number of units in the first hidden layer.
-            hidden_size2 (int): Number of units in the second hidden layer.
-            hidden_size3 (int): Number of units in the third hidden layer.
-            output_size (int): Number of output classes.
-
-        Attributes:
-            fc1 (nn.Linear): First fully connected layer.
-            relu1 (nn.ReLU): ReLU activation function.
-            fc2 (nn.Linear): Second fully connected layer.
-            relu2 (nn.ReLU): ReLU activation function.
-            fc3 (nn.Linear): Third fully connected layer.
-            relu3 (nn.ReLU): ReLU activation function.
-            fc4 (nn.Linear): Fourth fully connected layer.
-            softmax (nn.Softmax): Softmax activation function.
-
-        Methods:
-            forward: Forward pass through the network.
-
-        """
-
-        def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
-            """
-            Initialize the NeuralNetwork class.
-
-            Args:
-                input_size (int): The size of the input layer.
-                hidden_size1 (int): The size of the first hidden layer.
-                hidden_size2 (int): The size of the second hidden layer.
-                hidden_size3 (int): The size of the third hidden layer.
-                output_size (int): The size of the output layer.
-            """
-            super(NeuralNetwork, self).__init__()
-            self.fc1 = nn.Linear(input_size, hidden_size1).float()
-            self.relu1 = nn.ReLU()
-            self.fc2 = nn.Linear(hidden_size1, hidden_size2).float()
-            self.relu2 = nn.ReLU()
-            self.fc3 = nn.Linear(hidden_size2, hidden_size3).float()
-            self.relu3 = nn.ReLU()
-            self.fc4 = nn.Linear(hidden_size3, output_size).float()
-            self.softmax = nn.Softmax(dim=-1)
-
-        def forward(self, x):
-            """
-            Performs the forward pass of the neural network.
-
-            Args:
-                x (torch.Tensor): Input tensor.
-
-            Returns:
-                torch.Tensor: Output tensor after passing through the network.
-            """
-            x = self.fc1(x)
-            x = self.relu1(x)
-            x = self.fc2(x)
-            x = self.relu2(x)
-            x = self.fc3(x)
-            x = self.relu3(x)
-            x = self.fc4(x)
-            x = self.softmax(x)
-            return x
-
-
-def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
+def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose, test_path, train_path, valid_path):
     """
     Trains and evaluates an Artificial Neural Network (ANN) model for galaxy classification.
 
@@ -108,6 +23,9 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
         wd (float): The weight decay for the optimizer.
         batch_size (int): The batch size for training.
         verbose (bool): Whether to print training and validation information.
+        test_path (str): The path to the test file.
+        train_path (str): The path to the training file.
+        valid_path (str): The path to the validation file.
 
     Returns:
         None
@@ -117,9 +35,9 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
     data_folder = os.path.join('dataProcessing', 'processedData')
 
     # Import the three text files from the 'processedData' folder
-    test_path = os.path.join(data_folder, 'PCA_85K_test.txt')
-    train_path = os.path.join(data_folder, 'PCA_85k_train.txt')
-    valid_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
+    test_path = os.path.join(data_folder, test_path)
+    train_path = os.path.join(data_folder, train_path)
+    valid_path = os.path.join(data_folder, valid_path)
 
     label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
 
