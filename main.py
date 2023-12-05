@@ -14,27 +14,27 @@ if __name__ == "__main__":
 
     # Add the arguments. First 3 are whether to run PROCESS, ET, or ANN. The rest are hyperparameters and/or dataset filepaths.
     parser.add_argument('--PROCESS', default=False, type=bool, help='Run data preprocessing on object list to obtain input data for ML models') # PROCESS
-    parser.add_argument('--ET', default=False, type=bool, help='Run the ET model; specify hyperparameters and/or datasets or neither for default values.') # ET
-    parser.add_argument('--ANN', default=False, type=bool, help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
+    parser.add_argument('-ET', default=False, action='store_true', help='Run the ET model; specify hyperparameters and/or datasets or neither for default values.') # ET
+    parser.add_argument('-ANN', default=False, action='store_true', help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
+
     # ET arguments
-    parser.add_argument('--TRAIN_PATH', type=str, help='The path to the training dataset')
-    parser.add_argument('--TEST_PATH', type=str, help='The path to the testing dataset')
-    parser.add_argument('--VALID_PATH', type=str, help='The path to the validation dataset')
     parser.add_argument('--DEPTH', type=str, help='The max depth; can be an int or a list of ints')
     parser.add_argument('--NUM_OF_TREES', type=int, help='The number of trees in the forest')
-    parser.add_argument('--VERBOSE', type=bool, help='The verbosity of the model')
+
     # ANN arguments
     parser.add_argument('--EPOCHS', type=int, default=25, help='Number of epochs for training')
-    parser.add_argument('--HS1', type=int, default=24, help='Number of neurons in the first hidden layer')
+    parser.add_argument('--HS1', type=int, default=12, help='Number of neurons in the first hidden layer')
     parser.add_argument('--HS2', type=int, default=24, help='Number of neurons in the second hidden layer')
     parser.add_argument('--HS3', type=int, default=12, help='Number of neurons in the third hidden layer')
-    parser.add_argument('--LR', type=float, default=0.0001, help='Learning rate')
-    parser.add_argument('--WD', type=float, default=0.0001, help='Weight decay')
-    parser.add_argument('--BATCH_SIZE', type=int, default=32, help='Batch size for training')
-    parser.add_argument('-v', type=bool, default=False, help='Print out loss plots')
-    parser.add_argument('--test_path', type=str, default='PCA_85K_test.txt', help='Name of dataset txt file for testing')
-    parser.add_argument('--train_path', type=str, default='PCA_85K_train.txt', help='Name of dataset txt file for training')
-    parser.add_argument('--valid_path', type=str, default='PCA_85K_valid.txt', help='Name of dataset txt file for validation')
+    parser.add_argument('--LR', type=float, default=0.0004, help='Learning rate')
+    parser.add_argument('--WD', type=float, default=0.0003, help='Weight decay')
+    parser.add_argument('--BATCH_SIZE', type=int, default=30, help='Batch size for training')
+    parser.add_argument('-V', action='store_true', default=False, help='Print out loss plots')
+
+    # Input file paths
+    parser.add_argument('--TEST_PATH', type=str, default='PCA_85K_test.txt', help='Path to testing dataset txt')
+    parser.add_argument('--TRAIN_PATH', type=str, default='PCA_85K_train.txt', help='Path to training dataset txt')
+    parser.add_argument('--VALID_PATH', type=str, default='PCA_85K_valid.txt', help='Path to validation dataset txt')
 
     # Preprocess arguments
     parser.add_argument("--OBJ_LIST", default="test.csv", help="path to the object list you want to process (csv file) - MUST BE IN DATAACQUISITION/SPLIT_DATA_IDS/")
@@ -82,10 +82,10 @@ if __name__ == "__main__":
         LR = args.LR
         WD = args.WD
         BATCH_SIZE = args.BATCH_SIZE
-        VERBOSE = args.v
-        test_path = args.test_path
-        train_path = args.train_path
-        valid_path = args.valid_path
+        VERBOSE = args.V
+        test_path = args.TEST_PATH
+        train_path = args.TRAIN_PATH
+        valid_path = args.VALID_PATH
 
         ANN(EPOCHS, HS1, HS2, HS3, LR, WD, BATCH_SIZE, VERBOSE, test_path, train_path, valid_path)     
 
