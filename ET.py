@@ -8,9 +8,23 @@ from sklearn.metrics import confusion_matrix, precision_score, recall_score
 def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt', 
     testPath = './dataProcessing/processedData/testPCAList.txt',
     validPath = './dataProcessing/processedData/validPCAList.txt',
-    depthRange = range(5, 15, 2),
+    depthRange = range(5, 25, 5),
     numOfTreesRange = range(10, 150, 10),
     verbose = False):
+    """Runs the Extra Trees model with the given hyperparameters and datasets.
+    
+    trainPath: str, default='./dataProcessing/processedData/trainPCAList.txt'
+    
+    testPath: str, default='./dataProcessing/processedData/testPCAList.txt'
+    
+    validPath: str, default='./dataProcessing/processedData/validPCAList.txt'
+    
+    depthRange: listof(int), default=[5, 10, 15, 20, 25]
+    
+    numOfTreesRange: listof(int), default=[10, 20, 30, 40, 50]
+    
+    verbose: bool, default=False; whether to print the results of each model along the way.
+    """
     # Step 1: Load data
     def txtToList(filePath):
         """Takes filepath of a .txt of the form:
@@ -30,20 +44,28 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
         return trainFeatures, trainLabels
                 
 
-    
+    # Change if you want to use a different dataset
     trainPath = './dataProcessing/processedData/PCA_85k_train.txt'
     trainPath = './dataProcessing/processedData/PCA_85k_test.txt'
     validPath = './dataProcessing/processedData/PCA_85k_valid.txt'
     
+    # Load the data
     testFeatures, testLabels = txtToList(testPath)
     trainFeatures, trainLabels = txtToList(trainPath)
     validFeatures, validLabels = txtToList(validPath)
 
-    depthRange = [10] # To have a fixed depth
-    numOfTreesRange = [150] # To have a fixed number of trees
-    depthRange = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50] # To have a range of depths
-    numOfTreesRange = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] # To have a range of number of trees
-    validationResults = []
+    # Uncomment to use a fixed depth and number of trees:
+    
+    # depthRange = [10] # To have a fixed depth
+    # numOfTreesRange = [150] # To have a fixed number of trees
+    
+    # Uncomment to define a custom range of depths and number of trees:
+    # depthRange = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50] # To have a range of depths
+    # numOfTreesRange = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] # To have a range of number of trees
+    
+    # Initialize validation accuracy 2D array for plotting
+    validationResults = [[]]
+    # Initialize best training and validation accuracy encountered so far
     maxValidAccuracy = 0
     maxTrainAccuracy = 0
 
@@ -69,7 +91,7 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
                 random_state=None, 
                 verbose=0, 
                 warm_start=False, 
-                class_weight={'Elliptical':0.473, 'Spiral': 0.284, 'Star':0.237, 'Merger':0.006})
+                class_weight={'Elliptical':0.0473, 'Spiral': 0.284, 'Star':0.237, 'Merger':0.006})
 
             # Fit the model using the training data
             clf.fit(trainFeatures, trainLabels)
@@ -108,7 +130,9 @@ Validation (20% of Data) Accuracy: {validAccuracy}"""
         validationResults.append(validationRow)
     
     inference = bestModel.predict(trainFeatures)
+    print('First 30 labels during Inference:\n')
     print(inference[0:30])
+    print('First 30 true labels of input dataset:\n')
     print(trainLabels[0:30])
 
     # Step 5: Plot validation results
@@ -150,8 +174,10 @@ Validation (20% of Data) Accuracy: {validAccuracy}"""
     # Calculate precision and recall
     precision = precision_score(validLabels, validPredictions, average='macro', zero_division=0)
     recall = recall_score(validLabels, validPredictions, average='macro')
+    F_score = 2 * (precision * recall) / (precision + recall)
     print('Precision:', round(precision, 5))
     print('Recall:', round(recall, 5))
+    print('F_score:', round(F_score, 5))
 
 
     # Write All accuracies to a file, ET_accuracies.txt
