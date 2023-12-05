@@ -23,7 +23,7 @@ Use of AI tools, namely copilot, were used to assist in writing code for this pr
 ### Structure
 The GalaxyClassification-PHYS449 project is organized into several modules, each with a specific purpose related to the data acquisition, processing, and analysis stages of the project.
 
-1. dataAcquisition: This folder is responsible for obtaining object IDs. It includes code for querying the SDSS to fetch the required data. The object ID lists obtained from these queries are stored as CSV files in the Split_data_IDs folder.
+1. dataAcquisition: This folder is responsible for obtaining object IDs. It includes SQL Queries to fetch the required data. The SQL queries are inputted at this url: https://skyserver.sdss.org/dr16/en/tools/search/sql.aspx. The object ID lists obtained from these queries are stored as CSV files in the Split_data_IDs folder. It also contains a files used to split data into a train, validation, and test dataset.
 
 2. dataProcessing: This folder handles all the preprocessing of the data. It fetches the features of the objects using the IDs obtained in the data acquisition stage. The fetched features are stored in the featureVectors folder. After fetching the features, the module performs Principal Component Analysis (PCA) on them to create the input vectors for the machine learning models. The processed data is stored in the processedData folder. Additionally, this module performs some analysis on the PCA-transformed data, the results of which are stored in the PCAAnalysis subfolder within the dataProcessing folder.
 
@@ -35,7 +35,11 @@ In the main GalaxyClassification folder, there are several key files:
 
 3. ET.py: This file contains the code for the Extra Trees model. It defines the structure of the Extra Trees model and includes functions for training the model and evaluating its performance.
 
+4. ANN_hyperparameters_testing.py: This file is designed for hyperparameter optimization and automation. The user can change which parameters are to be tested. When run, the code will train a model for each combination of hyperparameters adn output the hyperparameters which gave the best accuracy.
+
 By organizing the code in this way, each folder and file can focus on a specific part of the data pipeline, making the code easier to understand and maintain. The use of separate folders for different types of data also helps keep the project organized and makes it easier to track the flow of data through the pipeline.
+
+ANN_results is where the resulting loss plots are stored for different input hyperparameters.
 
 
 ## Run instructions
@@ -71,8 +75,15 @@ When specifying file paths be sure to follow the following:
 - pandas
 - io
 - matplotlib
+- pickle
+- argparse
 
 # Citations
 Paper: Moonzarin Reza, Galaxy morphology classification using automated machine learning, Astronomy and Computing, Volume 37, 2021, 100492, ISSN 2213-1337, https://doi.org/10.1016/j.ascom.2021.100492.
+
+Galaxy Zoo Data: Lintott, C., Schawinski, K., Bamford, S., Slosar, A., Land, K., Thomas, D., Edmondson, E., Masters, K., Nichol, R. C., Raddick, M. J., Szalay, A., Andreescu, D., Murray, P., & Vandenberg, J. (2010). Galaxy Zoo 1: data release of morphological classifications for nearly 900 000 galaxies★. Monthly Notices of the Royal Astronomical Society, 410(1), 166–178. https://doi.org/10.1111/j.1365-2966.2010.17432.x
+
+Galaxy Zoo Debiased Data: Bamford, S. P., Nichol, R. C., Baldry, I. K., Land, K., Lintott, C. J., Schawinski, K., Slosar, A., Szalay, A. S., Thomas, D., Torki, M., Andreescu, D., Edmondson, E. M., Miller, C. J., Murray, P., Raddick, M. J., & Vandenberg, J. (2009). Galaxy Zoo: the dependence of morphology and colour on environment. Monthly Notices of the Royal Astronomical Society, 393(4), 1324–1352. https://doi.org/10.1111/j.1365-2966.2008.14252.x
+
 
 Scikit-learn: Machine Learning in Python, Pedregosa et al., JMLR 12, pp. 2825-2830, 2011. (https://jmlr.csail.mit.edu/papers/v12/pedregosa11a.html)
