@@ -1,3 +1,4 @@
+#Importing the libraries
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -11,6 +12,15 @@ import argparse
 from sklearn.model_selection import ParameterGrid
 
 def param_testing():
+    """
+    Perform hyperparameter testing for the ANN model.
+
+    This function reads the input data, defines the neural network model,
+    and performs hyperparameter testing using a grid search approach.
+
+    Returns:
+        None
+    """
     # Create parser
     parser = argparse.ArgumentParser(description='ANN for Galaxy Morphology Classification')
     parser.add_argument('--epochs', type=int, default=25, help='Number of epochs for training')
@@ -72,7 +82,41 @@ def param_testing():
 
     # Create a custom neural network class
     class NeuralNetwork(nn.Module):
+        """
+        Neural network model for galaxy morphology classification.
+
+        This class defines the architecture of the neural network model
+        used for galaxy morphology classification. It consists of multiple
+        fully connected layers with ReLU activation and a softmax output layer.
+
+        Args:
+            input_size (int): Number of input features
+            hidden_size1 (int): Number of neurons in the first hidden layer
+            hidden_size2 (int): Number of neurons in the second hidden layer
+            hidden_size3 (int): Number of neurons in the third hidden layer
+            output_size (int): Number of output classes
+
+        Attributes:
+            fc1 (nn.Linear): First fully connected layer
+            relu1 (nn.ReLU): ReLU activation function
+            fc2 (nn.Linear): Second fully connected layer
+            relu2 (nn.ReLU): ReLU activation function
+            fc3 (nn.Linear): Third fully connected layer
+            relu3 (nn.ReLU): ReLU activation function
+            fc4 (nn.Linear): Output fully connected layer
+            softmax (nn.Softmax): Softmax activation function
+        """
         def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
+            """
+                Initialize the neural network model.
+
+                Args:
+                    input_size (int): The size of the input layer.
+                    hidden_size1 (int): The size of the first hidden layer.
+                    hidden_size2 (int): The size of the second hidden layer.
+                    hidden_size3 (int): The size of the third hidden layer.
+                    output_size (int): The size of the output layer.
+                """
             super(NeuralNetwork, self).__init__()
             self.fc1 = nn.Linear(input_size, hidden_size1).float()
             self.relu1 = nn.ReLU()
@@ -84,6 +128,15 @@ def param_testing():
             self.softmax = nn.Softmax(dim=-1)
 
         def forward(self, x):
+            """
+            Performs the forward pass of the neural network.
+
+            Args:
+                x (torch.Tensor): Input tensor.
+
+            Returns:
+                torch.Tensor: Output tensor after passing through the network.
+            """
             x = self.fc1(x)
             x = self.relu1(x)
             x = self.fc2(x)
@@ -184,9 +237,10 @@ def param_testing():
                 best_accuracy = accuracy
                 best_params = params
 
+    # Print the best accuracy and parameters
     print(f'Best accuracy: {best_accuracy:.2f}%')
     print(f'Best parameters: {best_params}')
 
-
+# Run the main function
 if __name__ == '__main__':
     param_testing()
