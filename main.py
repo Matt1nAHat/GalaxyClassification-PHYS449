@@ -22,13 +22,13 @@ if __name__ == "__main__":
     parser.add_argument('--NUM_OF_TREES', type=int, default=50, help='The number of trees in the forest')
 
     # ANN arguments
-    parser.add_argument('--EPOCHS', type=int, default=25, help='Number of epochs for training')
-    parser.add_argument('--HS1', type=int, default=12, help='Number of neurons in the first hidden layer')
-    parser.add_argument('--HS2', type=int, default=24, help='Number of neurons in the second hidden layer')
-    parser.add_argument('--HS3', type=int, default=12, help='Number of neurons in the third hidden layer')
-    parser.add_argument('--LR', type=float, default=0.0004, help='Learning rate')
-    parser.add_argument('--WD', type=float, default=0.0003, help='Weight decay')
-    parser.add_argument('--BATCH_SIZE', type=int, default=30, help='Batch size for training')
+    parser.add_argument('--EPOCHS', type=int, default=16, help='Number of epochs for training')
+    parser.add_argument('--HS1', type=int, default=10, help='Number of neurons in the first hidden layer')
+    parser.add_argument('--HS2', type=int, default=25, help='Number of neurons in the second hidden layer')
+    parser.add_argument('--HS3', type=int, default=25, help='Number of neurons in the third hidden layer')
+    parser.add_argument('--LR', type=float, default=0.0001, help='Learning rate')
+    parser.add_argument('--WD', type=float, default=0.0001, help='Weight decay')
+    parser.add_argument('--BATCH_SIZE', type=int, default=25, help='Batch size for training')
     parser.add_argument('-V', action='store_true', default=False, help='Print out loss plots')
 
     # Input file paths
