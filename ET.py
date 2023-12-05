@@ -131,7 +131,8 @@ def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     validPredictions = bestModel.predict(validFeatures)
 
     # Calculate the confusion matrix
-    confMatrix = confusion_matrix(validLabels, validPredictions, labels=['Elliptical', 'Spiral', 'Star', 'Merger'])
+    galaxyLabels = ['Elliptical', 'Spiral', 'Star', 'Merger']
+    confMatrix = confusion_matrix(validLabels, validPredictions, labels=galaxyLabels)
     print('Confusion Matrix:\n', confMatrix)
 
     # Calculate precision and recall
@@ -147,6 +148,7 @@ def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt',
         f.write(ResultsString)
     # Write confusion matrix to a file, ET_confusion_matrix.txt
     with open('./ET_Results/ET_confusion_matrix.txt', 'w') as f:
+        f.write(label for label in galaxyLabels)
         f.write(str(confMatrix))
 
     # Step 6: Save model as pickel file for future use
