@@ -96,11 +96,11 @@ def param_testing():
 
     # Define hyperparameters
     param_grid = {
-        'hidden_size_1': [12],
-        'hidden_size_2': [24],
-        'hidden_size_3': [16],
-        'lr': [0.0004, 0.0006],
-        'wd': [0.0003, 0.0004],
+        'hidden_size_1': [10],
+        'hidden_size_2': [25],
+        'hidden_size_3': [25],
+        'lr': [0.0001],
+        'wd': [0.0001, 0.0002],
         'batch_size': [25, 30]
     }
 
