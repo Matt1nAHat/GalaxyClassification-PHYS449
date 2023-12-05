@@ -8,7 +8,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
-import argparse
 
 def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose, test_path, train_path, valid_path):
     """
@@ -250,6 +249,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose, test_
 
     # Print the confusion matrix and performance metrics
     print("Confusion Matrix:")
+    print("Elliptical Merger Spiral Star Collumn and Row Order")
     print(confusion_mat)
     print("")
 
