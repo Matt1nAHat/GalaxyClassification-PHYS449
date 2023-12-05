@@ -30,7 +30,7 @@ def plot(components, variance):
     plt.text(0, 97.4, 'Paper variance', color='red', va='bottom')
 
     # Save the plot to a file
-    plt.savefig('dataProcessing/PCAStats/pca_plots.png')
+    plt.savefig('dataProcessing/PCAAnalysis/pca_plots.png')
     plt.close()
      
 def performPCA(path, outPath):
