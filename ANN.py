@@ -12,12 +12,12 @@ import argparse
 def ANN():
     # Create parser
     parser = argparse.ArgumentParser(description='ANN for Galaxy Morphology Classification')
-    parser.add_argument('--epochs', type=int, default=10, help='Number of epochs for training')
+    parser.add_argument('--epochs', type=int, default=25, help='Number of epochs for training')
     parser.add_argument('--hidden_size_1', type=int, default=12, help='Number of neurons in the first hidden layer')
     parser.add_argument('--hidden_size_2', type=int, default=24, help='Number of neurons in the second hidden layer')
     parser.add_argument('--hidden_size_3', type=int, default=16, help='Number of neurons in the third hidden layer')
-    parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--wd', type=float, default=0.0001, help='Weight decay')
+    parser.add_argument('--lr', type=float, default=0.0005, help='Learning rate')
+    parser.add_argument('--wd', type=float, default=0.0002, help='Weight decay')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
 
     # Parse arguments
@@ -67,9 +67,6 @@ def ANN():
     Valid_features_tensor = torch.tensor(Valid_features).float()
 
     print('Data processing done')
-
-    # Assuming you have your features and labels as NumPy arrays
-    # (Code for creating dummy data remains the same)
 
     # Create a custom neural network class
     class NeuralNetwork(nn.Module):
@@ -210,7 +207,7 @@ def ANN():
     confusion_mat = confusion_matrix(Test_labels, predicted_labels_array)
 
     # Calculate precision, recall, and F-score for each class
-    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=0.01)
+    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=0)
     recall = recall_score(Test_labels, predicted_labels_array, average=None)
     f_score = f1_score(Test_labels, predicted_labels_array, average=None)
 
@@ -226,5 +223,5 @@ def ANN():
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
     print(f"Percentage of correctness: {accuracy:.2f}%")
 
-if __name__ == '__ANN__':
+if __name__ == '__main__':
     ANN()

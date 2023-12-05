@@ -201,7 +201,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
     confusion_mat = confusion_matrix(Test_labels, predicted_labels_array)
 
     # Calculate precision, recall, and F-score for each class
-    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=0.01)
+    precision = precision_score(Test_labels, predicted_labels_array, average=None, zero_division=0)
     recall = recall_score(Test_labels, predicted_labels_array, average=None)
     f_score = f1_score(Test_labels, predicted_labels_array, average=None)
 
@@ -217,5 +217,5 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
     print(f"Percentage of correctness: {accuracy:.2f}%")
 
-if __name__ == '__ANN__':
+if __name__ == '__main__':
     ANN()

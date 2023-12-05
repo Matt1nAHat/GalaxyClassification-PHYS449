@@ -96,10 +96,10 @@ def main():
 
     # Define hyperparameters
     param_grid = {
-        'hidden_size_1': [12, 24],
-        'hidden_size_2': [12, 24],
-        'hidden_size_3': [12, 24],
-        'lr': [0.0001, 0.0005],
+        # 'hidden_size_1': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+        # 'hidden_size_2': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+        # 'hidden_size_3': [5, 10, 15, 20, 25, 30, 35, 40, 45, 50],
+        'lr': [0.0001, 0.0003, 0.0005, 0.00005],
         'wd': [0.0001, 0.0003],
         'batch_size': [32, 64]
     }
@@ -113,9 +113,9 @@ def main():
         print(f'Running configuration {i+1} of {len(grid)}: {params}')
 
         # Update the args with the current parameters
-        hidden_size1 = params['hidden_size_1'] # test 5 nodes with 3 layers or 50-100 nodes for 1 layer
-        hidden_size2 = params['hidden_size_2']
-        hidden_size3 = params['hidden_size_3']
+        # hidden_size1 = params['hidden_size_1']
+        # hidden_size2 = params['hidden_size_2']
+        # hidden_size3 = params['hidden_size_3']
         args.lr = params['lr']
         args.wd = params['wd']
         args.batch_size = params['batch_size']
@@ -124,7 +124,7 @@ def main():
     
 
         # Create the neural network, loss function, and optimizer
-        model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
+        model = NeuralNetwork(input_size, 24, 24, 12, output_size)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)
 
