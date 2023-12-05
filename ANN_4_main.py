@@ -250,6 +250,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose, test_
 
     # Print the confusion matrix and performance metrics
     print("Confusion Matrix:")
+    print("Elliptical Merger Spiral Star Collumn and Row Order")
     print(confusion_mat)
     print("")
 
