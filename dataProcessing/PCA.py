@@ -123,7 +123,7 @@ def performPCA(path, outPath):
     components_df = components_df.apply(lambda row: pd.Series(row.nlargest(5).index), axis=1)
 
     # Create a new Excel writer object
-    with pd.ExcelWriter('dataProcessing/PCAStats/pca_components.xlsx') as writer:
+    with pd.ExcelWriter('dataProcessing/PCAAnalysis/pca_components.xlsx') as writer:
         # Write the DataFrame to the Excel file
         components_df.to_excel(writer, header=False)
 
