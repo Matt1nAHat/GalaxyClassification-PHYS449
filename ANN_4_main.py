@@ -1,3 +1,4 @@
+#Importing the necessary libraries
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -8,15 +9,34 @@ import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score
 
-def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
+def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose, test_path, train_path, valid_path):
+    """
+    Trains and evaluates an Artificial Neural Network (ANN) model for galaxy classification.
+
+    Args:
+        epochs (int): The number of training epochs.
+        hidden_1 (int): The number of units in the first hidden layer.
+        hidden_2 (int): The number of units in the second hidden layer.
+        hidden_3 (int): The number of units in the third hidden layer.
+        lr (float): The learning rate for the optimizer.
+        wd (float): The weight decay for the optimizer.
+        batch_size (int): The batch size for training.
+        verbose (bool): Whether to print training and validation information.
+        test_path (str): The path to the test file.
+        train_path (str): The path to the training file.
+        valid_path (str): The path to the validation file.
+
+    Returns:
+        None
+    """
 
     # Specify the path to the 'processedData' folder
     data_folder = os.path.join('dataProcessing', 'processedData')
 
     # Import the three text files from the 'processedData' folder
-    test_path = os.path.join(data_folder, 'PCA_85K_test.txt')
-    train_path = os.path.join(data_folder, 'PCA_85k_train.txt')
-    valid_path = os.path.join(data_folder, 'PCA_85K_valid.txt')
+    test_path = os.path.join(data_folder, test_path)
+    train_path = os.path.join(data_folder, train_path)
+    valid_path = os.path.join(data_folder, valid_path)
 
     label_mapping = {'Spiral': 0, 'Merger': 1, 'Elliptical': 2, 'Star': 3}
 
@@ -60,6 +80,17 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
     # Create a custom neural network class
     class NeuralNetwork(nn.Module):
+        """
+        A neural network model for galaxy classification.
+
+        Args:
+            input_size (int): The size of the input layer.
+            hidden_size1 (int): The size of the first hidden layer.
+            hidden_size2 (int): The size of the second hidden layer.
+            hidden_size3 (int): The size of the third hidden layer.
+            output_size (int): The size of the output layer.
+        """
+
         def __init__(self, input_size, hidden_size1, hidden_size2, hidden_size3, output_size):
             super(NeuralNetwork, self).__init__()
             self.fc1 = nn.Linear(input_size, hidden_size1).float()
@@ -72,6 +103,15 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
             self.softmax = nn.Softmax(dim=-1)
 
         def forward(self, x):
+            """
+            Forward pass of the neural network.
+
+            Args:
+                x (torch.Tensor): The input tensor.
+
+            Returns:
+                torch.Tensor: The output tensor.
+            """
             x = self.fc1(x)
             x = self.relu1(x)
             x = self.fc2(x)
@@ -110,6 +150,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
     print('Training...')
 
+    #Training model for the number of epochs specified
     for epoch in range(num_epochs):
         # Training phase
         model.train()
@@ -132,6 +173,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
             epoch_train_loss += loss.item()
 
+        #Defining training loss and kl divergence
         avg_train_loss = epoch_train_loss / len(train_dataloader)
         avg_kl_divergence = kl_divergence / len(train_dataloader)
 
@@ -157,6 +199,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
         if verbose:
             print(f'Validation - Epoch [{epoch + 1}/{num_epochs}], Loss: {avg_valid_loss:.4f}')
 
+    #Plotting the training and validation losses
     if verbose:
         # Plot the losses and KL divergence for both training and validation
         plt.figure(figsize=(10, 6))
@@ -206,6 +249,7 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
 
     # Print the confusion matrix and performance metrics
     print("Confusion Matrix:")
+    print("Elliptical Merger Spiral Star Collumn and Row Order")
     print(confusion_mat)
     print("")
 
@@ -216,5 +260,6 @@ def ANN(epochs, hidden_1, hidden_2, hidden_3, lr, wd, batch_size, verbose):
     print(f"Star - Precision: {precision[3]:.2f}, Recall: {recall[3]:.2f}, F-score: {f_score[3]:.2f}")
     print(f"Percentage of correctness: {accuracy:.2f}%")
 
+#Defining the arguments for the ANN
 if __name__ == '__main__':
     ANN()

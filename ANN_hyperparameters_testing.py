@@ -116,14 +116,17 @@ def main():
         hidden_size1 = params['hidden_size_1']
         hidden_size2 = params['hidden_size_2']
         hidden_size3 = params['hidden_size_3']
+        hidden_size1 = params['hidden_size_1']
+        hidden_size2 = params['hidden_size_2']
+        hidden_size3 = params['hidden_size_3']
         args.lr = params['lr']
         args.wd = params['wd']
         args.batch_size = params['batch_size']
         input_size = 25
         output_size = 4  # Number of classes
-    
 
         # Create the neural network, loss function, and optimizer
+        model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
         model = NeuralNetwork(input_size, hidden_size1, hidden_size2, hidden_size3, output_size)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)

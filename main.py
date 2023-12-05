@@ -32,11 +32,14 @@ if __name__ == "__main__":
     parser.add_argument('--WD', type=float, default=0.0001, help='Weight decay')
     parser.add_argument('--BATCH_SIZE', type=int, default=32, help='Batch size for training')
     parser.add_argument('-v', type=bool, default=False, help='Print out loss plots')
+    parser.add_argument('--test_path', type=str, default='PCA_85K_test.txt', help='Name of dataset txt file for testing')
+    parser.add_argument('--train_path', type=str, default='PCA_85K_train.txt', help='Name of dataset txt file for training')
+    parser.add_argument('--valid_path', type=str, default='PCA_85K_valid.txt', help='Name of dataset txt file for validation')
 
     # Preprocess arguments
-    parser.add_argument("--OBJ_LIST", default="dataAcquisition/Split_data_IDs/test.csv", help="path to the object list you want to process")
-    parser.add_argument("--FEATURE_OUT", default="dataProcessing/featureVectors/featuresList.txt", help="path to save the feature vectors")
-    parser.add_argument("--PCA_OUT", default="dataProcessing/processedData/PCAList.txt", help="path to save the final PCA data with labels")
+    parser.add_argument("--OBJ_LIST", default="test.csv", help="path to the object list you want to process (csv file) - MUST BE IN DATAACQUISITION/SPLIT_DATA_IDS/")
+    parser.add_argument("--FEATURE_OUT", default="featuresList.txt", help="path to save the feature vectors (txt file) - MUST BE IN DATAPROCESSING/FEATUREVECTORS/")
+    parser.add_argument("--PCA_OUT", default="PCAList.txt", help="path to save the final PCA data with labels (txt file) - MUST BE IN DATAPROCESSING/PROCESSEDDATA/")
     
     
     # Execute the parse_args() method, obtain whether to run ET or ANN
@@ -80,12 +83,15 @@ if __name__ == "__main__":
         WD = args.WD
         BATCH_SIZE = args.BATCH_SIZE
         VERBOSE = args.v
+        test_path = args.test_path
+        train_path = args.train_path
+        valid_path = args.valid_path
 
-        ANN(EPOCHS, HS1, HS2, HS3, LR, WD, BATCH_SIZE, VERBOSE)     
+        ANN(EPOCHS, HS1, HS2, HS3, LR, WD, BATCH_SIZE, VERBOSE, test_path, train_path, valid_path)     
 
 
     # If PROCESS is chosen:
     if run_PROCESS:
-        # Run the preprocessing
-        saveFeatureVectors(args.OBJ_LIST, args.FEATURE_OUT)
-        performPCA(args.FEATURE_OUT, args.PCA_OUT)
+        # Run the preprocessing of given files
+        saveFeatureVectors(f"dataAcquisition/Split_data_IDs/{args.OBJ_LIST}", f"dataProcessing/featureVectors/{args.FEATURE_OUT}")
+        performPCA(f"dataProcessing/featureVectors/{args.FEATURE_OUT}", f"dataProcessing/processedData/{args.PCA_OUT}")
