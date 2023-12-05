@@ -20,8 +20,8 @@ if __name__ == "__main__":
     parser.add_argument('--TRAIN_PATH', type=str, help='The path to the training dataset')
     parser.add_argument('--TEST_PATH', type=str, help='The path to the testing dataset')
     parser.add_argument('--VALID_PATH', type=str, help='The path to the validation dataset')
-    parser.add_argument('--DEPTH', type=str, help='The max depth; can be an int or a list of ints')
-    parser.add_argument('--NUM_OF_TREES', type=int, help='The number of trees in the forest')
+    parser.add_argument('--DEPTH', type=str, default=10, help='The max depth; can be an int or a list of ints')
+    parser.add_argument('--NUM_OF_TREES', type=int, default=50, help='The number of trees in the forest')
     parser.add_argument('--VERBOSE', type=bool, help='The verbosity of the model')
     # ANN arguments
     parser.add_argument('--EPOCHS', type=int, default=25, help='Number of epochs for training')
