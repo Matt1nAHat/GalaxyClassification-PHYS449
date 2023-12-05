@@ -25,6 +25,13 @@ def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     
     verbose: bool, default=False; whether to print the results of each model along the way.
     """
+    # Convert depthRange and numOfTreesRange to lists if they are not already lists
+    if type(depthRange) == int:
+        depthRange = [depthRange]
+    
+    if type(numOfTreesRange) == int:
+        numOfTreesRange = [numOfTreesRange]
+
     # Step 1: Load data
     def txtToList(filePath):
         """Takes filepath of a .txt of the form:
@@ -157,7 +164,8 @@ def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     
 
     # Show the plot
-    plt.show()
+    if verbose:
+        plt.show()
     
     # Step 6: Create confusion matrix for best model
 
@@ -182,7 +190,8 @@ def ETModel(trainPath = './dataProcessing/processedData/trainPCAList.txt',
         f.write(ResultsString)
     # Write confusion matrix to a file, ET_confusion_matrix.txt
     with open('./ET_Results/ET_confusion_matrix.txt', 'w') as f:
-        f.write(label for label in galaxyLabels)
+        for label in galaxyLabels:
+            f.write(label)
         f.write(str(confMatrix))
 
     # Step 7: Save best model as pickel file for future use

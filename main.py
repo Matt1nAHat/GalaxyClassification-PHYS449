@@ -13,7 +13,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Provide hyperparameters & dataset filepaths.")
 
     # Add the arguments. First 3 are whether to run PROCESS, ET, or ANN. The rest are hyperparameters and/or dataset filepaths.
-    parser.add_argument('-PROCESS', default=False, type=bool, help='Run data preprocessing on object list to obtain input data for ML models') # PROCESS
+    parser.add_argument('-PROCESS', default=False, action='store_true', help='Run data preprocessing on object list to obtain input data for ML models') # PROCESS
     parser.add_argument('-ET', default=False, action='store_true', help='Run the ET model; specify hyperparameters and/or datasets or neither for default values.') # ET
     parser.add_argument('-ANN', default=False, action='store_true', help='Run the ANN model; specify hyperparameters and/or datasets or neither for default values.') # ANN
 
@@ -32,9 +32,9 @@ if __name__ == "__main__":
     parser.add_argument('-V', action='store_true', default=False, help='Print out loss plots')
 
     # Input file paths
-    parser.add_argument('--TEST_PATH', type=str, default='dataProcessing\processedData\PCA_85k_test.txt', help='Path to testing dataset txt')
-    parser.add_argument('--TRAIN_PATH', type=str, default='dataProcessing\processedData\PCA_85k_train.txt', help='Path to training dataset txt')
-    parser.add_argument('--VALID_PATH', type=str, default='dataProcessing\processedData\PCA_85k_valid.txt', help='Path to validation dataset txt')
+    parser.add_argument('--TEST_PATH', type=str, default='PCA_85k_test.txt', help='Path to testing dataset txt')
+    parser.add_argument('--TRAIN_PATH', type=str, default='PCA_85k_train.txt', help='Path to training dataset txt')
+    parser.add_argument('--VALID_PATH', type=str, default='PCA_85k_valid.txt', help='Path to validation dataset txt')
 
     # Preprocess arguments
     parser.add_argument("--OBJ_LIST", default="test.csv", help="path to the object list you want to process (csv file) - MUST BE IN DATAACQUISITION/SPLIT_DATA_IDS/")
@@ -71,7 +71,7 @@ if __name__ == "__main__":
             # If that fails, try to parse it as a list of integers
             NUM_OF_TREES = [int(item) for item in args.NUM_OF_TREES.split(',')]
         
-        ETModel(TRAIN_PATH, TEST_PATH, VALID_PATH, DEPTH, NUM_OF_TREES, VERBOSE)
+        ETModel(f"dataProcessing/processedData/{TRAIN_PATH}", f"dataProcessing/processedData/{TEST_PATH}", f"dataProcessing/processedData/{VALID_PATH}", DEPTH, NUM_OF_TREES, VERBOSE)
 
     if run_ANN:
         # Parse the ANN arguments
