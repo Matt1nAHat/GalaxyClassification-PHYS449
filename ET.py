@@ -31,22 +31,27 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
                 
 
     
-    # trainPath = './dataProcessing/processedData/PCA_50k_train.txt'
-    trainFeatures, trainLabels = txtToList(trainPath)
-    # trainPath = './dataProcessing/processedData/PCA_50k_test.txt'
+    trainPath = './dataProcessing/processedData/PCA_85k_train.txt'
+    trainPath = './dataProcessing/processedData/PCA_85k_test.txt'
+    validPath = './dataProcessing/processedData/PCA_85k_valid.txt'
+    
     testFeatures, testLabels = txtToList(testPath)
-    # validPath = './dataProcessing/processedData/PCA_50k_valid.txt'
+    trainFeatures, trainLabels = txtToList(trainPath)
     validFeatures, validLabels = txtToList(validPath)
 
-    # depthRange = [10] # To have a fixed depth
-    # numOfTreesRange = [50] # To have a fixed number of trees
+    depthRange = [10] # To have a fixed depth
+    numOfTreesRange = [150] # To have a fixed number of trees
+    depthRange = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50] # To have a range of depths
+    numOfTreesRange = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100] # To have a range of number of trees
     validationResults = []
-    maxAccuracy = 0
+    maxValidAccuracy = 0
+    maxTrainAccuracy = 0
 
+
+# Step 2: Train model (initialize, fit) for each combination of hyperparameters
     for depth in depthRange:
         validationRow = []
         for num_of_trees in numOfTreesRange:
-            # Step 2: Train model (initialize, fit)
             # Initialize the ExtraTreesClassifier
             clf = ExtraTreesClassifier(
                 n_estimators=num_of_trees, 
@@ -64,14 +69,11 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
                 random_state=None, 
                 verbose=0, 
                 warm_start=False, 
-                class_weight=None)
+                class_weight={'Elliptical':0.473, 'Spiral': 0.284, 'Star':0.237, 'Merger':0.006})
 
             # Fit the model using the training data
             clf.fit(trainFeatures, trainLabels)
 
-            inference = clf.predict(trainFeatures)
-            # print(inference[0:10])
-            # print(trainLabels[0:10])
             trainAccuracy = clf.score(trainFeatures, trainLabels)
             
 
@@ -86,20 +88,28 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
             validationRow.append(round(validAccuracy, 5))
             
             # Save the best model
-            if validAccuracy > maxAccuracy:
-                maxAccuracy = validAccuracy
-                bestDepth = depth
-                bestNumOfTrees = num_of_trees
+            if validAccuracy > maxValidAccuracy:
+                maxValidAccuracy = validAccuracy
+                bestValidDepth = depth
+                bestValidNumOfTrees = num_of_trees
                 bestModel = clf
+            if trainAccuracy > maxTrainAccuracy:
+                maxTrainAccuracy = trainAccuracy
+                bestTrainDepth = depth
+                bestTrainNumOfTrees = num_of_trees
 
             ResultsString = f"""Training   (70% of Data) Accuracy: {trainAccuracy}
-            Testing    (10% of Data) Accuracy: {testAccuracy}
-            Validation (20% of Data) Accuracy: {validAccuracy}"""
+Testing    (10% of Data) Accuracy: {testAccuracy}
+Validation (20% of Data) Accuracy: {validAccuracy}"""
             
             if verbose:
                 print(f"Depth: {depth}, Num of Trees: {num_of_trees}")
                 print(ResultsString)
         validationResults.append(validationRow)
+    
+    inference = bestModel.predict(trainFeatures)
+    print(inference[0:30])
+    print(trainLabels[0:30])
 
     # Step 5: Plot validation results
 
@@ -122,7 +132,8 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     ax.set_ylabel('Depth')
     ax.set_xlabel('Number of Trees')
     ax.set_zlabel('Validation Results')
-    ax.set_title(f'Highest accuracy: {maxAccuracy}, at depth {bestDepth} and {bestNumOfTrees} trees')
+    ax.set_title(f'Highest validation accuracy: {maxValidAccuracy}, at depth {bestValidDepth} and {bestValidNumOfTrees} trees\nHighest training accuracy: {trainAccuracy}, at depth {bestTrainDepth} and {bestTrainNumOfTrees} trees')
+    
 
     # Show the plot
     plt.show()
@@ -133,11 +144,11 @@ def ET(trainPath = './dataProcessing/processedData/trainPCAList.txt',
     validPredictions = bestModel.predict(validFeatures)
 
     # Calculate the confusion matrix
-    confMatrix = confusion_matrix(validLabels, validPredictions)
+    confMatrix = confusion_matrix(validLabels, validPredictions, labels=['Elliptical', 'Spiral', 'Star', 'Merger'])
     print('Confusion Matrix:\n', confMatrix)
 
     # Calculate precision and recall
-    precision = precision_score(validLabels, validPredictions, average='macro')
+    precision = precision_score(validLabels, validPredictions, average='macro', zero_division=0)
     recall = recall_score(validLabels, validPredictions, average='macro')
     print('Precision:', round(precision, 5))
     print('Recall:', round(recall, 5))
