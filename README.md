@@ -1,5 +1,5 @@
 # GalaxyClassification-PHYS449
- Final project for PHYS 449 - a ML model that will classify galaxies based on the paper by Moonzarin Reza
+ Final project for PHYS 449 - ML models for galaxy classification based on the paper by Moonzarin Reza
 
 ### Members:
 - Matthew Charbonneau - 20822976
