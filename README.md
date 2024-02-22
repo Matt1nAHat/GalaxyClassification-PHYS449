@@ -53,7 +53,7 @@ To train the ANN on existing post-PCA files with default hyperparameters:
 python main.py -ANN
 ```
 
-To preprocess a list of objects to use for the models (fetch the features and perform PCA):
+To preprocess a list of objects to use for the models (i.e. fetch the features and perform PCA):
 ```sh
 python main.py -PROCESS --OBJ_LIST "test.csv" 
 ```
