@@ -59,7 +59,7 @@ python main.py -PROCESS --OBJ_LIST "test.csv"
 ```
 
 *NOTE*
-When specifying file paths be sure to follow the following:
+When specifying file paths be sure to follow these criteria:
 - For training/validation/testing parameters the file name input must match the file in the dataProcessing/processedData folder
 - For --OBJ_LIST the file name input must match the file in the dataAcquisition/Split_data_IDs folder
 - For --FEATURE_OUT the file name input must match the file in the dataProcessing/featureVectors folder
