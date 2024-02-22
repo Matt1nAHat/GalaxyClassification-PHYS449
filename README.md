@@ -23,7 +23,7 @@ Use of AI tools, namely copilot, were used to assist in writing code for this pr
 ### Structure
 The GalaxyClassification-PHYS449 project is organized into several modules, each with a specific purpose related to the data acquisition, processing, and analysis stages of the project.
 
-1. dataAcquisition: This folder is responsible for obtaining object IDs. It includes SQL Queries to fetch the required data. The SQL queries are inputted at this url: https://skyserver.sdss.org/dr16/en/tools/search/sql.aspx. The object ID lists obtained from these queries are stored as CSV files in the Split_data_IDs folder. It also contains a files used to split data into a train, validation, and test dataset.
+1. dataAcquisition: This folder is responsible for obtaining object IDs. It includes SQL Queries to fetch the required data. The SQL queries are inputted at this url: https://skyserver.sdss.org/dr16/en/tools/search/sql.aspx. The object ID lists obtained from these queries are stored as CSV files in the Split_data_IDs folder. It also contains a file used to split data into a train, validation, and test dataset.
 
 2. dataProcessing: This folder handles all the preprocessing of the data. It fetches the features of the objects using the IDs obtained in the data acquisition stage. The fetched features are stored in the featureVectors folder. After fetching the features, the module performs Principal Component Analysis (PCA) on them to create the input vectors for the machine learning models. The processed data is stored in the processedData folder. Additionally, this module performs some analysis on the PCA-transformed data, the results of which are stored in the PCAAnalysis subfolder within the dataProcessing folder.
 
